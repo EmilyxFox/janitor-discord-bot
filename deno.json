@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "discord.js": "npm:discord.js@^14.17.3",
+    "$types/": "./types/"
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 160,
+    "indentWidth": 2
+  }
+}
