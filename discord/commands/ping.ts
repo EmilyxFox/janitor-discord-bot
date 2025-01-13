@@ -7,8 +7,8 @@ import type { DiscordBot } from "../client.ts";
 
 export class PingCommand implements Command {
   data = new SlashCommandBuilder()
-    .setName("testembed")
-    .setDescription("Test Embed");
+    .setName("ping")
+    .setDescription("Replies with pong!");
 
   async run(
     interaction: ChatInputCommandInteraction,
