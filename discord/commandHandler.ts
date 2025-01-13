@@ -1,6 +1,7 @@
 import type { Command } from "$types/command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
+import { PingCommand } from "./commands/ping.ts";
 
 export class CommandHandler {
   private commands: Command[];
@@ -11,7 +12,7 @@ export class CommandHandler {
     if (!token)
       throw new Error("Invalid Discord token when registering commands");
 
-    this.commands = [];
+    this.commands = [new PingCommand()];
     this.discordREST = new REST().setToken(token);
 
     const clientId = Deno.env.get("CLIENT_ID");

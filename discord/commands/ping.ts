@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import type { DiscordBot } from "../client.ts";
 
-export class TestEmbedCommand implements Command {
+export class PingCommand implements Command {
   data = new SlashCommandBuilder()
     .setName("testembed")
     .setDescription("Test Embed");
