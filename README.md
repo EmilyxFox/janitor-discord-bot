@@ -9,7 +9,7 @@ git clone https://github.com/EmilyxFox/brothel-discord-bot.git
 
 ## 3. Cache dependencies
 ```shell
-deno cache main.ts
+deno install
 ```
 
 ## 4. Get a bot token
