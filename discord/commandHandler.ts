@@ -62,15 +62,15 @@ export class CommandHandler {
     await matchedCommand
       .run(interaction, botClient)
       .then(() => {
-        console.log(
-          `Sucesfully executed command [/${
-            interaction.commandName
-          } ${interaction.options.getSubcommand()}]`,
-          {
-            guild: { id: interaction.guildId },
-            user: { name: interaction.user.globalName },
-          }
-        );
+        const logMessage = interaction.options.getSubcommand(false)
+          ? `Successfully executed subcommand [/${
+              interaction.commandName
+            } ${interaction.options.getSubcommand()}]`
+          : `Successfully executed command [/${interaction.commandName}]`;
+        console.log(logMessage, {
+          guild: { id: interaction.guildId },
+          user: { name: interaction.user.globalName },
+        });
       })
       .catch((err) => {
         console.log(
