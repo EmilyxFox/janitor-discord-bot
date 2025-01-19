@@ -18,13 +18,13 @@ export class BulkDeleteCommand implements Command {
         .setName("amount")
         .setDescription("The amount of messages to attempt to delete.")
         .setMinValue(1)
-        .setMaxValue(2000)
+        .setMaxValue(100)
         .setRequired(true)
     );
 
   async run(
     interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot,
+    _botClient: DiscordBot
   ): Promise<unknown> {
     if (!interaction.channel?.isTextBased()) {
       return;
@@ -47,10 +47,11 @@ export class BulkDeleteCommand implements Command {
       .setLabel("Cancel")
       .setStyle(ButtonStyle.Secondary);
 
-    const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-      cancel,
-      confirm,
-    );
+    const row =
+      new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+        cancel,
+        confirm
+      );
 
     if (interaction.channel?.isSendable()) {
       const confirmMessage = await interaction.reply({
@@ -60,10 +61,11 @@ export class BulkDeleteCommand implements Command {
       });
 
       try {
-        const confirmation = await confirmMessage.resource?.message?.awaitMessageComponent({
-          filter: (i) => i.user.id === interaction.user.id,
-          time: 60_000,
-        });
+        const confirmation =
+          await confirmMessage.resource?.message?.awaitMessageComponent({
+            filter: (i) => i.user.id === interaction.user.id,
+            time: 60_000,
+          });
 
         if (confirmation?.customId === "bulkdeleteconfirm") {
           confirmMessage.resource?.message?.delete();
