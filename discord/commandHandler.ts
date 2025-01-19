@@ -1,8 +1,8 @@
 import type { Command } from "$types/command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
-import { PingCommand } from "./commands/ping.ts";
-import { BulkDeleteCommand } from "./commands/bulkDelete.ts";
+import { PingCommand } from "$commands/ping.ts";
+import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 
 export class CommandHandler {
   private commands: Command[];
@@ -39,7 +39,7 @@ export class CommandHandler {
         // Don't really know if this is a good way to do it :)
         if (Array.isArray(data)) {
           console.log(
-            `Successfully registered ${data.length} global application commands`,
+            `Successfully registered ${data.length} global application commands`
           );
         }
       })
@@ -50,12 +50,12 @@ export class CommandHandler {
 
   async handleCommand(
     interaction: ChatInputCommandInteraction,
-    botClient: DiscordBot,
+    botClient: DiscordBot
   ) {
     const commandName = interaction.commandName;
 
     const matchedCommand = this.commands.find(
-      (command) => command.data.name === commandName,
+      (command) => command.data.name === commandName
     );
 
     if (!matchedCommand) return Promise.reject("Command not found");
@@ -64,7 +64,9 @@ export class CommandHandler {
       .run(interaction, botClient)
       .then(() => {
         const logMessage = interaction.options.getSubcommand(false)
-          ? `Successfully executed subcommand [/${interaction.commandName} ${interaction.options.getSubcommand()}]`
+          ? `Successfully executed subcommand [/${
+              interaction.commandName
+            } ${interaction.options.getSubcommand()}]`
           : `Successfully executed command [/${interaction.commandName}]`;
         console.log(logMessage, {
           guild: { id: interaction.guildId },
@@ -77,7 +79,7 @@ export class CommandHandler {
           {
             guild: { id: interaction.guildId },
             user: { name: interaction.user.globalName },
-          },
+          }
         );
       });
   }
