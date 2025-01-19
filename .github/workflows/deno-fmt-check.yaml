@@ -20,4 +20,6 @@ jobs:
 
       - name: Check code formatting
         run: |
-          deno fmt --check || echo "Run 'deno fmt' locally to fix formatting issues."
+          deno fmt --check || (
+            echo "Code formatting issues detected. Run 'deno fmt' locally to fix them." && exit 1
+          )
