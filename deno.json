@@ -1,11 +1,12 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run -A --env-file --watch main.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
     "discord.js": "npm:discord.js@^14.17.3",
-    "$types/": "./types/"
+    "$types/": "./types/",
+    "$commands/": "./discord/commands/"
   },
   "fmt": {
     "useTabs": false,

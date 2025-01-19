@@ -1,8 +1,8 @@
 import type { Command } from "$types/command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
-import { PingCommand } from "./commands/ping.ts";
-import { BulkDeleteCommand } from "./commands/bulkDelete.ts";
+import { PingCommand } from "$commands/ping.ts";
+import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 
 export class CommandHandler {
   private commands: Command[];

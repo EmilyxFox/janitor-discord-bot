@@ -8,5 +8,8 @@
   "editor.tabSize": 2,
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }
