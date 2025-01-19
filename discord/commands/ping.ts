@@ -11,6 +11,6 @@ export class PingCommand implements Command {
     interaction: ChatInputCommandInteraction,
     _botClient: DiscordBot,
   ): Promise<unknown> {
-    return await interaction.reply("pong");
+    return await interaction.reply("pong-2");
   }
 }
