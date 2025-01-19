@@ -1,9 +1,4 @@
-import type {
-  ChatInputCommandInteraction,
-  SlashCommandBuilder,
-  SlashCommandOptionsOnlyBuilder,
-  SlashCommandSubcommandsOnlyBuilder,
-} from "discord.js";
+import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import type { DiscordBot } from "../discord/client.ts";
 
 export interface Command {
@@ -14,6 +9,6 @@ export interface Command {
 
   run(
     interaction: ChatInputCommandInteraction,
-    botClient: DiscordBot
+    botClient: DiscordBot,
   ): Promise<unknown>;
 }

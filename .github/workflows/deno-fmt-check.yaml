@@ -1,0 +1,25 @@
+name: Validate Formatting
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  deno-format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: 2.1.6
+
+      - name: Check code formatting
+        run: |
+          deno fmt --check || (
+            echo "Code formatting issues detected. Run 'deno fmt' locally to fix them." && exit 1
+          )
