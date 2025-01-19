@@ -1,8 +1,5 @@
 import type { Command } from "$types/command.ts";
-import {
-  type ChatInputCommandInteraction,
-  SlashCommandBuilder,
-} from "discord.js";
+import { type ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import type { DiscordBot } from "../client.ts";
 
 export class PingCommand implements Command {
@@ -12,7 +9,7 @@ export class PingCommand implements Command {
 
   async run(
     interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot
+    _botClient: DiscordBot,
   ): Promise<unknown> {
     return await interaction.reply("pong");
   }
