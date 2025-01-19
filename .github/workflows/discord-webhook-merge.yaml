@@ -15,7 +15,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_EMBEDS: |
-            [
+            '[
               {
                 "title": "Pull Request Notification",
                 "description": "Pull Request [#${{ github.event.pull_request.number }}](${{
@@ -44,7 +44,7 @@ jobs:
                 },
                 "timestamp": "${{ github.event.pull_request.updated_at }}"
               }
-            ]
+            ]'
         uses: Ilshidur/action-discord@0.3.2
         with:
           args: "The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed."
