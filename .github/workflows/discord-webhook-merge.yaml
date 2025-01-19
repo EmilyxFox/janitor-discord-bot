@@ -1,0 +1,48 @@
+name: Notify Discord on PR
+
+on:
+  pull_request:
+    types: [opened, closed]
+    branches:
+      - "main"
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [{
+            title: "Pull Request Notification",
+            description: "Pull Request [#${{ github.event.pull_request.number }}](${{
+              github.event.pull_request.html_url
+            }}) has been **${{ github.event.action }}**.",
+            color: 5814783,
+            fields: [
+              {
+                name: "Title",
+                value: "${{ github.event.pull_request.title }}",
+                inline: true
+              },
+              {
+                name: "State",
+                value: "${{ github.event.pull_request.state }}",
+                inline: true
+              },
+              {
+                name: "User",
+                value: "${{ github.event.pull_request.user.login }}",
+                inline: true
+              }
+            ],
+            footer: {
+              text: "GitHub Actions Bot"
+            },
+            timestamp: "${{ github.event.pull_request.updated_at }}"
+            }]
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: "The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed."
