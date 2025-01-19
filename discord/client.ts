@@ -9,7 +9,7 @@ export class DiscordBot {
   constructor(config: discordClientConfig) {
     this.config = config;
     this.discordClient = new Client({
-      intents: [GatewayIntentBits.Guilds]
+      intents: [GatewayIntentBits.Guilds],
     });
 
     this.commandHandler = new CommandHandler(this.config.token);
