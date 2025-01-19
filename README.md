@@ -33,5 +33,5 @@ Reset the token and put it in a .env file.
 ## 5. Run the bot
 
 ```shell
-deno run --env-file -A --watch main.ts
+deno task dev
 ```
