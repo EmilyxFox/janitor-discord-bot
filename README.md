@@ -7,7 +7,7 @@
 ## 2. Clone the repo
 
 ```shell
-git clone https://github.com/EmilyxFox/brothel-discord-bot.git
+git clone https://github.com/EmilyxFox/janitor-discord-bot.git
 ```
 
 ## 3. Cache dependencies
