@@ -26,7 +26,7 @@ export class BulkDeleteCommand implements Command {
     interaction: ChatInputCommandInteraction,
     _botClient: DiscordBot
   ): Promise<unknown> {
-    if (!interaction.channel?.isTextBased()) {
+    if (!interaction.channel?.isSendable()) {
       return;
     }
     if (interaction.channel.isDMBased()) {
@@ -53,40 +53,38 @@ export class BulkDeleteCommand implements Command {
         confirm
       );
 
-    if (interaction.channel?.isSendable()) {
-      const confirmMessage = await interaction.reply({
-        content: `Are you sure you want to bulk delete ${deleteAmount} messages?`,
-        components: [row],
-        withResponse: true,
-      });
+    const confirmMessage = await interaction.reply({
+      content: `Are you sure you want to bulk delete ${deleteAmount} messages?`,
+      components: [row],
+      withResponse: true,
+    });
 
-      try {
-        const confirmation =
-          await confirmMessage.resource?.message?.awaitMessageComponent({
-            filter: (i) => i.user.id === interaction.user.id,
-            time: 60_000,
-          });
+    try {
+      const confirmation =
+        await confirmMessage.resource?.message?.awaitMessageComponent({
+          filter: (i) => i.user.id === interaction.user.id,
+          time: 60_000,
+        });
 
-        if (confirmation?.customId === "bulkdeleteconfirm") {
-          confirmMessage.resource?.message?.delete();
+      if (confirmation?.customId === "bulkdeleteconfirm") {
+        confirmMessage.resource?.message?.delete();
 
-          interaction.channel.bulkDelete(deleteAmount);
-        } else if (confirmation?.customId === "bulkdeletecancel") {
-          interaction.editReply({
-            content: "Bulk deletion cancelled.",
-            components: [],
-          });
-
-          setTimeout(async () => {
-            await confirmMessage.resource?.message?.delete();
-          }, 3_000);
-        }
-      } catch {
-        await interaction.editReply({
-          content: "Confirmation not received within 1 minute, cancelling",
+        interaction.channel.bulkDelete(deleteAmount);
+      } else if (confirmation?.customId === "bulkdeletecancel") {
+        interaction.editReply({
+          content: "Bulk deletion cancelled.",
           components: [],
         });
+
+        setTimeout(async () => {
+          await confirmMessage.resource?.message?.delete();
+        }, 3_000);
       }
+    } catch {
+      await interaction.editReply({
+        content: "Confirmation not received within 1 minute, cancelling",
+        components: [],
+      });
     }
   }
 }
