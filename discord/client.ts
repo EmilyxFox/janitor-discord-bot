@@ -22,6 +22,12 @@ export class DiscordBot {
     this.setupEventListeners();
   }
 
+  private startCronJobs(): void {
+    Deno.cron("Vent Channel Deletion", { hour: { every: 24 } }, () => {
+      
+    });
+  }
+
   private setupEventListeners(): void {
     this.discordClient.once("ready", () => {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
