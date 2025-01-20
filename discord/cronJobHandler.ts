@@ -19,11 +19,11 @@ const deleteVentChannelMessages = async (client: DiscordBot) => {
     return;
   }
   // Schedule the cron job to run every 24 hours
-
   console.log("Running daily cleanup task...");
+
   try {
     const now = Date.now();
-    let lastMessageId = null;
+    let lastMessageId = undefined;
 
     // Fetch messages in a paginated way
     while (true) {
@@ -38,7 +38,8 @@ const deleteVentChannelMessages = async (client: DiscordBot) => {
 
       // Filter messages older than 24 hours
       const oldMessages = messages.filter(
-        (msg: Message) => now - msg.createdTimestamp > 24 * 60 * 60 * 1000
+        // (msg: Message) => now - msg.createdTimestamp > 24 * 60 * 60 * 1000
+        (msg: Message) => now - msg.createdTimestamp > 60 * 1000
       );
 
       // Delete messages one by one to respect rate limits
