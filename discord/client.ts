@@ -1,18 +1,21 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
 import { CommandHandler } from "./commandHandler.ts";
+import { EventHandler } from "./EventHandler.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
   config: discordClientConfig;
   commandHandler: CommandHandler;
+  eventHandler: EventHandler;
   constructor(config: discordClientConfig) {
     this.config = config;
     this.discordClient = new Client({
-      intents: [GatewayIntentBits.Guilds],
+      intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     });
 
     this.commandHandler = new CommandHandler(this.config.token);
+    this.eventHandler = new EventHandler();
   }
 
   async initialise(): Promise<void> {
@@ -20,6 +23,10 @@ export class DiscordBot {
     await this.discordClient.login(this.config.token);
 
     this.setupEventListeners();
+    this.eventHandler.registerEventHandler("messageCreate", (message) => {
+      console.log(`[${message.author.globalName}]: ${message.content}`);
+    });
+    this.eventHandler.startHandling(this.discordClient);
   }
 
   private setupEventListeners(): void {
