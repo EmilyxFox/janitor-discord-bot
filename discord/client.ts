@@ -23,10 +23,6 @@ export class DiscordBot {
     await this.discordClient.login(this.config.token);
 
     this.setupEventListeners();
-    this.eventHandler.registerEventHandler("messageCreate", (message) => {
-      console.log(`[${message.author.globalName}]: ${message.content}`);
-    });
-    this.eventHandler.startHandling(this.discordClient);
   }
 
   private setupEventListeners(): void {
@@ -34,10 +30,16 @@ export class DiscordBot {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
     });
 
-    this.discordClient.on(Events.InteractionCreate, (interaction) => {
+    this.eventHandler.registerEventHandler(Events.InteractionCreate, (interaction) => {
       if (interaction.isChatInputCommand()) {
         this.commandHandler.handleCommand(interaction, this);
       }
     });
+
+    this.eventHandler.registerEventHandler("messageCreate", (message) => {
+      console.log(`[${message.author.globalName}]: ${message.content}`);
+    });
+
+    this.eventHandler.startHandling(this.discordClient);
   }
 }
