@@ -67,7 +67,15 @@ export class BulkDeleteCommand implements Command {
       if (confirmation?.customId === "bulkdeleteconfirm") {
         confirmMessage.resource?.message?.delete();
 
-        interaction.channel.bulkDelete(deleteAmount);
+        interaction.channel.bulkDelete(deleteAmount)
+          .catch((e) => {
+            if (e.code === 50001) {
+              return interaction.editReply({
+                content: "I do not have permission to delete messages in this channel.",
+                components: [],
+              });
+            }
+          });
       } else if (confirmation?.customId === "bulkdeletecancel") {
         interaction.editReply({
           content: "Bulk deletion cancelled.",
