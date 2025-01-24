@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   type ChatInputCommandInteraction,
   MessageActionRowComponentBuilder,
+  PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
 import type { DiscordBot } from "../client.ts";
@@ -13,6 +14,7 @@ export class BulkDeleteCommand implements Command {
   data = new SlashCommandBuilder()
     .setName("bulkdelete")
     .setDescription("Deletes the last X amount of messages")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .addNumberOption((opt) =>
       opt
         .setName("amount")
