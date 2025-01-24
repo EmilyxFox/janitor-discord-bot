@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
 import { CommandHandler } from "./commandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
+import { findBlueskyHandles } from "./events/findBlueskyHandles.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -39,6 +40,8 @@ export class DiscordBot {
     this.eventHandler.registerEventHandler("messageCreate", (message) => {
       console.log(`[${message.author.globalName}]: ${message.content}`);
     });
+
+    this.eventHandler.registerEventHandler("messageCreate", findBlueskyHandles);
 
     this.eventHandler.startHandling(this.discordClient);
   }
