@@ -38,7 +38,7 @@ export class DiscordBot {
     });
 
     this.eventHandler.registerEventHandler("messageCreate", (message) => {
-      console.log(`[${message.author.globalName}]: ${message.content}`);
+      console.log(`[${message.author.displayName}]: ${message.content}`);
     });
 
     this.eventHandler.registerEventHandler("messageCreate", findBlueskyHandles);
