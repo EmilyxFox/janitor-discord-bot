@@ -1,18 +1,11 @@
-import type {
-  ChatInputCommandInteraction,
-  ContextMenuCommandBuilder,
-  SlashCommandBuilder,
-  SlashCommandOptionsOnlyBuilder,
-  SlashCommandSubcommandsOnlyBuilder,
-} from "discord.js";
+import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import type { DiscordBot } from "../discord/client.ts";
 
 export interface Command {
   data:
     | SlashCommandBuilder
     | SlashCommandOptionsOnlyBuilder
-    | SlashCommandSubcommandsOnlyBuilder
-    | ContextMenuCommandBuilder;
+    | SlashCommandSubcommandsOnlyBuilder;
 
   run(
     interaction: ChatInputCommandInteraction,

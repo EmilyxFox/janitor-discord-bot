@@ -1,11 +1,14 @@
 import type { Command } from "$types/command.ts";
-import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
+import { type ChatInputCommandInteraction, ContextMenuCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
+import { AddReactionRoles } from "$commands/addReactionRoles.ts";
+import { ContextMenuCommand } from "$types/ContextMenuCommand.ts";
 
 export class CommandHandler {
-  private commands: Command[];
+  private slashCommands: Command[];
+  private contextMenuCommands: ContextMenuCommand[];
   private discordREST: REST;
   private clientId: string;
 
@@ -14,7 +17,8 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.commands = [new PingCommand(), new BulkDeleteCommand()];
+    this.slashCommands = [new PingCommand(), new BulkDeleteCommand()];
+    this.contextMenuCommands = [new AddReactionRoles()];
     this.discordREST = new REST().setToken(token);
 
     const clientId = Deno.env.get("CLIENT_ID");
@@ -26,11 +30,19 @@ export class CommandHandler {
   }
 
   getSlashCommands() {
-    return this.commands.map((command: Command) => command.data.toJSON());
+    return this.slashCommands.map((command: Command) => command.data.toJSON());
+  }
+
+  getContextMenuCommands() {
+    return this.contextMenuCommands.map((command: ContextMenuCommand) => command.data.toJSON());
+  }
+
+  getAllCommands() {
+    return [...this.getSlashCommands(), ...this.getContextMenuCommands()];
   }
 
   registerCommands() {
-    const commands = this.getSlashCommands();
+    const commands = this.getAllCommands();
     this.discordREST
       .put(Routes.applicationCommands(this.clientId), {
         body: commands,
@@ -48,15 +60,13 @@ export class CommandHandler {
       });
   }
 
-  async handleCommand(
+  async handleSlashCommand(
     interaction: ChatInputCommandInteraction,
     botClient: DiscordBot,
   ) {
     const commandName = interaction.commandName;
 
-    const matchedCommand = this.commands.find(
-      (command) => command.data.name === commandName,
-    );
+    const matchedCommand = this.slashCommands.find((command) => command.data.name === commandName);
 
     if (!matchedCommand) return Promise.reject("Command not found");
 
@@ -66,6 +76,36 @@ export class CommandHandler {
         const logMessage = interaction.options.getSubcommand(false)
           ? `Successfully executed subcommand [/${interaction.commandName} ${interaction.options.getSubcommand()}]`
           : `Successfully executed command [/${interaction.commandName}]`;
+        console.log(logMessage, {
+          guild: { id: interaction.guildId },
+          user: { name: interaction.user.globalName },
+        });
+      })
+      .catch((err) => {
+        console.log(
+          `Error executing command [/${interaction.commandName}]: ${err}`,
+          {
+            guild: { id: interaction.guildId },
+            user: { name: interaction.user.globalName },
+          },
+        );
+      });
+  }
+
+  async handleContextMenuCommand(
+    interaction: ContextMenuCommandInteraction,
+    botClient: DiscordBot,
+  ) {
+    const commandName = interaction.commandName;
+
+    const matchedCommand = this.contextMenuCommands.find((command) => command.data.name === commandName);
+
+    if (!matchedCommand) return Promise.reject("Command not found");
+
+    await matchedCommand
+      .run(interaction, botClient)
+      .then(() => {
+        const logMessage = `Successfully executed context menu command [/${interaction.commandName}] on target: [${interaction.targetId}]`;
         console.log(logMessage, {
           guild: { id: interaction.guildId },
           user: { name: interaction.user.globalName },

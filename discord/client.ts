@@ -33,7 +33,10 @@ export class DiscordBot {
 
     this.eventHandler.registerEventHandler(Events.InteractionCreate, (interaction) => {
       if (interaction.isChatInputCommand()) {
-        this.commandHandler.handleCommand(interaction, this);
+        this.commandHandler.handleSlashCommand(interaction, this);
+      }
+      if (interaction.isContextMenuCommand()) {
+        this.commandHandler.handleContextMenuCommand(interaction, this);
       }
     });
 
