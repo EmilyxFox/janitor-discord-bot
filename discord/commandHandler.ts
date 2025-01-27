@@ -3,6 +3,7 @@ import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
+import { CreatePollCommand } from "$commands/createPoll.ts";
 
 export class CommandHandler {
   private commands: Command[];
@@ -14,7 +15,7 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.commands = [new PingCommand(), new BulkDeleteCommand()];
+    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand()];
     this.discordREST = new REST().setToken(token);
 
     const clientId = Deno.env.get("CLIENT_ID");
