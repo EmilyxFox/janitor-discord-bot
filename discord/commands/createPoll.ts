@@ -16,11 +16,19 @@ export class CreatePollCommand implements Command {
         .setDescription("Set the title of your poll.")
         .setRequired(true)
     )
-    .addNumberOption((opt) =>
-      opt
-        .setName("duration")
-        .setDescription("Duration of the poll in hours. Default is 12 hours.")
-        .setRequired(false)
+    .addNumberOption((option) =>
+      option
+        .setName("category")
+        .setDescription("The gif category")
+        .setRequired(true)
+        .addChoices(
+          { name: "1 hour", value: 1 },
+          { name: "2 hours", value: 2 },
+          { name: "4 hours", value: 4 },
+          { name: "8 hours", value: 8 },
+          { name: "12 hours", value: 12 },
+          { name: "24 hours", value: 24 }
+        )
     );
 
   async run(
@@ -37,36 +45,31 @@ export class CreatePollCommand implements Command {
       return;
     }
 
-    const myPoll = {
-      poll: {
-        question: { text: "" },
-        answers: [
-          { text: "Yes", emoji: "✅" },
-          { text: "No", emoji: "❌" },
-          { text: "Idc", emoji: "😎" },
-        ],
-        allowMultiselect: false,
-        duration: 12,
-        layoutType: PollLayoutType.Default,
-      },
-    };
-
-    let prompt: string = "";
-    let pollDuration: number = 0;
-
     try {
-      myPoll.poll.question.text =
-        interaction.options.getString("prompt") ?? "No promt was give";
-      myPoll.poll.duration = interaction.options.getNumber("duration") ?? 12;
-
-
-      const channel = interaction.channel;
-
-      
+      (
+        await (
+          await interaction.reply({
+            poll: {
+              question: { text: `${interaction.options.getString("prompt")}` },
+              answers: [
+                { text: "Yes", emoji: "✅" },
+                { text: "No", emoji: "❌" },
+                { text: "Idc", emoji: "🤔" },
+              ],
+              allowMultiselect: false,
+              duration: interaction.options.getNumber("category") ?? 12,
+              layoutType: PollLayoutType.Default,
+            },
+            withResponse: false,
+          })
+        ).fetch()
+      ).startThread({
+        name: `${interaction.options.getString("prompt")}`,
+        autoArchiveDuration: 1440,
+        reason: "Poll discussion",
+      });
     } catch (err) {
-      return await interaction.reply(`${err}`);
+      return interaction.reply(`${err}`);
     }
-
-    return interaction.reply(myPoll);
   }
 }
