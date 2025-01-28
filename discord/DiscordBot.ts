@@ -1,16 +1,19 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
-import { CommandHandler } from "./commandHandler.ts";
+import { CommandHandler } from "./CommandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
 import { findBlueskyHandles } from "$events/findBlueskyHandles.ts";
 import { respondToGoodBot } from "$events/respondToGoodBot.ts";
 import { env } from "$utils/env.ts";
+import { CronHandler } from "./CronHandler.ts";
+import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
   config: discordClientConfig;
   commandHandler: CommandHandler;
   eventHandler: EventHandler;
+  cronHandler: CronHandler;
   constructor(config: discordClientConfig) {
     this.config = config;
     this.discordClient = new Client({
@@ -19,6 +22,7 @@ export class DiscordBot {
 
     this.commandHandler = new CommandHandler(this.config.token);
     this.eventHandler = new EventHandler();
+    this.cronHandler = new CronHandler();
   }
 
   async initialise(): Promise<void> {
@@ -49,6 +53,9 @@ export class DiscordBot {
       },
     ]);
 
+    if (env.DEV) this.cronHandler.registerCronJob([new TestCronJob()]);
+
     this.eventHandler.startHandling(this.discordClient);
+    this.cronHandler.startHandling();
   }
 }

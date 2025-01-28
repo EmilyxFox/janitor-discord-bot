@@ -1,4 +1,4 @@
-import { DiscordBot } from "./discord/client.ts";
+import { DiscordBot } from "./discord/DiscordBot.ts";
 import { env } from "./utils/env.ts";
 
 console.log("Starting bot...");

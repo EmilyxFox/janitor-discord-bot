@@ -1,4 +1,4 @@
-import type { Command } from "$types/command.ts";
+import type { Command } from "$types/Command.ts";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
-import type { DiscordBot } from "../client.ts";
+import type { DiscordBot } from "../DiscordBot.ts";
 
 export class BulkDeleteCommand implements Command {
   data = new SlashCommandBuilder()
