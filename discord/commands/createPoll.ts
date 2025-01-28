@@ -35,11 +35,11 @@ export class CreatePollCommand implements Command {
     if (!interaction.channel?.isSendable()) {
       return;
     }
-    if (interaction.channel.isDMBased()) {
-      return interaction.reply("This command is only available in guilds.");
-    }
     if (!interaction.channel.isTextBased()) {
       return;
+    }
+    if (interaction.channel.isDMBased()) {
+      return interaction.reply("This command is only available in guilds.");
     }
 
     try {
