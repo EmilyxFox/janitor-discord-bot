@@ -5,12 +5,12 @@ import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 import { AddReactionRoles } from "$commands/addReactionRoles.ts";
 import { ContextMenuCommand } from "$types/ContextMenuCommand.ts";
+import { env } from "../utils/env.ts";
 
 export class CommandHandler {
   private slashCommands: Command[];
   private contextMenuCommands: ContextMenuCommand[];
   private discordREST: REST;
-  private clientId: string;
 
   constructor(token: string) {
     if (!token) {
@@ -20,13 +20,6 @@ export class CommandHandler {
     this.slashCommands = [new PingCommand(), new BulkDeleteCommand()];
     this.contextMenuCommands = [new AddReactionRoles()];
     this.discordREST = new REST().setToken(token);
-
-    const clientId = Deno.env.get("CLIENT_ID");
-    if (clientId) {
-      this.clientId = clientId;
-    } else {
-      throw new Error("Invalid client or guild ID");
-    }
   }
 
   getSlashCommands() {
@@ -44,10 +37,10 @@ export class CommandHandler {
   registerCommands() {
     const commands = this.getAllCommands();
     this.discordREST
-      .put(Routes.applicationCommands(this.clientId), {
+      .put(Routes.applicationCommands(env.CLIENT_ID), {
         body: commands,
       })
-      .then((data) => {
+      .then((data: unknown) => {
         // Don't really know if this is a good way to do it :)
         if (Array.isArray(data)) {
           console.log(
@@ -55,7 +48,7 @@ export class CommandHandler {
           );
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.error("Error registering application (/) commands", err);
       });
   }
