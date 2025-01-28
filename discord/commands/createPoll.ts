@@ -1,5 +1,13 @@
 import type { Command } from "$types/command.ts";
-import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder, subtext, ThreadAutoArchiveDuration } from "discord.js";
+import {
+  type ChatInputCommandInteraction,
+  InteractionContextType,
+  PermissionFlagsBits,
+  PollLayoutType,
+  SlashCommandBuilder,
+  subtext,
+  ThreadAutoArchiveDuration,
+} from "discord.js";
 import { DiscordBot } from "../client.ts";
 
 export class CreatePollCommand implements Command {
@@ -7,6 +15,7 @@ export class CreatePollCommand implements Command {
     .setName("createpoll")
     .setDescription("Creates a poll with the given options and duration.")
     .setContexts(InteractionContextType.Guild)
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendPolls)
     .addStringOption((opt) =>
       opt
         .setName("prompt")
