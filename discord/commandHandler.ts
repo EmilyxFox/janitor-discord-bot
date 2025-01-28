@@ -23,6 +23,7 @@ export class CommandHandler {
   }
 
   registerCommands() {
+    console.log("Registering commands...");
     const commands = this.getSlashCommands();
     this.discordREST
       .put(Routes.applicationCommands(env.CLIENT_ID), {
