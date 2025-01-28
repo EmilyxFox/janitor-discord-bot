@@ -5,7 +5,7 @@ import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 import { AddReactionRoles } from "$commands/addReactionRoles.ts";
 import { ContextMenuCommand } from "$types/ContextMenuCommand.ts";
-import { env } from "../utils/env.ts";
+import { env } from "$utils/env.ts";
 
 export class CommandHandler {
   private slashCommands: Command[];
@@ -35,7 +35,8 @@ export class CommandHandler {
   }
 
   registerCommands() {
-    const commands = this.getAllCommands();
+    console.log("Registering commands...");
+    const commands = this.getSlashCommands();
     this.discordREST
       .put(Routes.applicationCommands(env.CLIENT_ID), {
         body: commands,
