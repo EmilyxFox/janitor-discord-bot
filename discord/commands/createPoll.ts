@@ -1,9 +1,5 @@
 import type { Command } from "$types/command.ts";
-import {
-  type ChatInputCommandInteraction,
-  PollLayoutType,
-  SlashCommandBuilder,
-} from "discord.js";
+import { type ChatInputCommandInteraction, PollLayoutType, SlashCommandBuilder } from "discord.js";
 import { DiscordBot } from "../client.ts";
 
 export class CreatePollCommand implements Command {
@@ -27,13 +23,13 @@ export class CreatePollCommand implements Command {
           { name: "4 hours", value: 4 },
           { name: "8 hours", value: 8 },
           { name: "12 hours", value: 12 },
-          { name: "24 hours", value: 24 }
+          { name: "24 hours", value: 24 },
         )
     );
 
   async run(
     interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot
+    _botClient: DiscordBot,
   ): Promise<unknown> {
     if (!interaction.channel?.isSendable()) {
       return;
