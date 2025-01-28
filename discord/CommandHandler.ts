@@ -1,9 +1,9 @@
-import type { Command } from "../types/Command.ts";
+import type { Command } from "$types/Command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./DiscordBot.ts";
-import { PingCommand } from "$commands/ping.ts";
-import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
-import { CreatePollCommand } from "$commands/createPoll.ts";
+import { PingCommand } from "$commands/Ping.ts";
+import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
+import { CreatePollCommand } from "$commands/CreatePoll.ts";
 import { env } from "$utils/env.ts";
 
 export class CommandHandler {
