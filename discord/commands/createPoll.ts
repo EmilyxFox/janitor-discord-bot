@@ -1,11 +1,12 @@
 import type { Command } from "$types/command.ts";
-import { type ChatInputCommandInteraction, PollLayoutType, SlashCommandBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder } from "discord.js";
 import { DiscordBot } from "../client.ts";
 
 export class CreatePollCommand implements Command {
   data = new SlashCommandBuilder()
     .setName("createpoll")
     .setDescription("Creates a poll with the given options and duration.")
+    .setContexts(InteractionContextType.Guild)
     .addStringOption((opt) =>
       opt
         .setName("prompt")
