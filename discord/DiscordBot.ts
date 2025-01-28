@@ -53,7 +53,7 @@ export class DiscordBot {
       },
     ]);
 
-    this.cronHandler.registerCronJob([new TestCronJob()]);
+    if (env.DEV) this.cronHandler.registerCronJob([new TestCronJob()]);
 
     this.eventHandler.startHandling(this.discordClient);
     this.cronHandler.startHandling();
