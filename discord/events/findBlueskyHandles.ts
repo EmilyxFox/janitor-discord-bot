@@ -44,6 +44,7 @@ const fetchBskyProfiles = async (actors: string[]): Promise<GetProfiles> => {
 
 export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Message<boolean>>) => {
   const handles = extractBlueskyHandles(message.content);
+  const formatter = Intl.NumberFormat("de-ch"); // German Swiss formatting (22'039'464)
   if (handles.length < 1) return;
   if (handles.length > 25) return console.log("Too many handle matches in one message.");
 
@@ -60,8 +61,8 @@ export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Mess
       .setAuthor({ name: "Bluesky", iconURL: "https://web-cdn.bsky.app/static/favicon-32x32.png", url: "https://bsky.app" })
       .setThumbnail(profile.avatar)
       .addFields(
-        { name: "Followers", value: String(profile.followersCount), inline: true },
-        { name: "Follows", value: String(profile.followsCount), inline: true },
+        { name: "Followers", value: String(formatter.format(profile.followersCount)), inline: true },
+        { name: "Follows", value: String(formatter.format(profile.followsCount)), inline: true },
       );
     embeds.push(embed);
   }

@@ -5,6 +5,7 @@ import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 import { AddReactionRoles } from "$commands/addReactionRoles.ts";
 import { ContextMenuCommand } from "$types/ContextMenuCommand.ts";
+import { CreatePollCommand } from "$commands/createPoll.ts";
 import { env } from "$utils/env.ts";
 
 export class CommandHandler {
@@ -17,7 +18,7 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.slashCommands = [new PingCommand(), new BulkDeleteCommand()];
+    this.slashCommands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand()];
     this.contextMenuCommands = [new AddReactionRoles()];
     this.discordREST = new REST().setToken(token);
   }
