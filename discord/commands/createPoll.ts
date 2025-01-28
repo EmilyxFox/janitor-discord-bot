@@ -3,6 +3,7 @@ import {
   type ChatInputCommandInteraction,
   InteractionContextType,
   PermissionFlagsBits,
+  PollData,
   PollLayoutType,
   SlashCommandBuilder,
   subtext,
@@ -57,7 +58,7 @@ export class CreatePollCommand implements Command {
     const duration = interaction.options.getNumber("time") ?? 12;
 
     try {
-      const poll = {
+      const poll: PollData = {
         question: { text: question },
         answers: [
           { text: "Yes", emoji: "✅" },
