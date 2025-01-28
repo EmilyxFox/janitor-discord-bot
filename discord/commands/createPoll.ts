@@ -42,26 +42,31 @@ export class CreatePollCommand implements Command {
       return interaction.reply("This command is only available in guilds.");
     }
 
+    const question = interaction.options.getString("prompt");
+    if (!question) return interaction.reply("No prompt supplied.");
+
+    const duration = interaction.options.getNumber("time") ?? 12;
+
     try {
       (
         await (
           await interaction.reply({
             poll: {
-              question: { text: `${interaction.options.getString("prompt")}` },
+              question: { text: question },
               answers: [
                 { text: "Yes", emoji: "✅" },
                 { text: "No", emoji: "❌" },
                 { text: "Idc", emoji: "🤔" },
               ],
               allowMultiselect: false,
-              duration: interaction.options.getNumber("category") ?? 12,
+              duration: duration,
               layoutType: PollLayoutType.Default,
             },
             withResponse: false,
           })
         ).fetch()
       ).startThread({
-        name: `${interaction.options.getString("prompt")}`,
+        name: question,
         autoArchiveDuration: 1440,
         reason: "Poll discussion",
       });
