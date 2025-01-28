@@ -4,6 +4,7 @@ import { CommandHandler } from "./commandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
 import { findBlueskyHandles } from "./events/findBlueskyHandles.ts";
 import { respondToGoodBot } from "./events/respondToGoodBot.ts";
+import { env } from "../utils/env.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -42,7 +43,9 @@ export class DiscordBot {
       findBlueskyHandles,
       respondToGoodBot,
       (message) => {
-        console.log(`[${message.author.displayName}]: ${message.content}`);
+        if (env.DEV) {
+          console.log(`[${message.author.displayName}]: ${message.content}`);
+        }
       },
     ]);
 
