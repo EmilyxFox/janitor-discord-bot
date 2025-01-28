@@ -15,9 +15,9 @@ export class CreatePollCommand implements Command {
     )
     .addNumberOption((option) =>
       option
-        .setName("category")
-        .setDescription("The gif category")
-        .setRequired(true)
+        .setName("time")
+        .setDescription("How long the poll should run for. Defaults to 12 hours.")
+        .setRequired(false)
         .addChoices(
           { name: "1 hour", value: 1 },
           { name: "2 hours", value: 2 },
