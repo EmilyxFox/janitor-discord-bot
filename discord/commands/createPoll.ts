@@ -1,5 +1,5 @@
 import type { Command } from "$types/command.ts";
-import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder, subtext } from "discord.js";
+import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder, subtext, ThreadAutoArchiveDuration } from "discord.js";
 import { DiscordBot } from "../client.ts";
 
 export class CreatePollCommand implements Command {
@@ -48,26 +48,23 @@ export class CreatePollCommand implements Command {
     const duration = interaction.options.getNumber("time") ?? 12;
 
     try {
-      (
-        await (
-          await interaction.reply({
-            poll: {
-              question: { text: question },
-              answers: [
-                { text: "Yes", emoji: "✅" },
-                { text: "No", emoji: "❌" },
-                { text: "Idc", emoji: "🤔" },
-              ],
-              allowMultiselect: false,
-              duration: duration,
-              layoutType: PollLayoutType.Default,
-            },
-            withResponse: false,
-          })
-        ).fetch()
-      ).startThread({
+      const poll = {
+        question: { text: question },
+        answers: [
+          { text: "Yes", emoji: "✅" },
+          { text: "No", emoji: "❌" },
+          { text: "Idc", emoji: "🤔" },
+        ],
+        allowMultiselect: false,
+        duration,
+        layoutType: PollLayoutType.Default,
+      };
+
+      const reply = await interaction.reply({ poll, withResponse: true });
+
+      reply.resource?.message?.startThread({
         name: question,
-        autoArchiveDuration: 1440,
+        autoArchiveDuration: ThreadAutoArchiveDuration.OneDay,
         reason: "Poll discussion",
       });
     } catch (_err) {
