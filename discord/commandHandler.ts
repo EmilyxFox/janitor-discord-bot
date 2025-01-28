@@ -4,11 +4,11 @@ import type { DiscordBot } from "./client.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 import { CreatePollCommand } from "$commands/createPoll.ts";
+import { env } from "$utils/env.ts";
 
 export class CommandHandler {
   private commands: Command[];
   private discordREST: REST;
-  private clientId: string;
 
   constructor(token: string) {
     if (!token) {
@@ -17,13 +17,6 @@ export class CommandHandler {
 
     this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand()];
     this.discordREST = new REST().setToken(token);
-
-    const clientId = Deno.env.get("CLIENT_ID");
-    if (clientId) {
-      this.clientId = clientId;
-    } else {
-      throw new Error("Invalid client or guild ID");
-    }
   }
 
   getSlashCommands() {
@@ -31,12 +24,13 @@ export class CommandHandler {
   }
 
   registerCommands() {
+    console.log("Registering commands...");
     const commands = this.getSlashCommands();
     this.discordREST
-      .put(Routes.applicationCommands(this.clientId), {
+      .put(Routes.applicationCommands(env.CLIENT_ID), {
         body: commands,
       })
-      .then((data) => {
+      .then((data: unknown) => {
         // Don't really know if this is a good way to do it :)
         if (Array.isArray(data)) {
           console.log(
@@ -44,7 +38,7 @@ export class CommandHandler {
           );
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.error("Error registering application (/) commands", err);
       });
   }
