@@ -1,5 +1,5 @@
 import type { Command } from "$types/command.ts";
-import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder } from "discord.js";
+import { type ChatInputCommandInteraction, InteractionContextType, PollLayoutType, SlashCommandBuilder, subtext } from "discord.js";
 import { DiscordBot } from "../client.ts";
 
 export class CreatePollCommand implements Command {
@@ -70,8 +70,8 @@ export class CreatePollCommand implements Command {
         autoArchiveDuration: 1440,
         reason: "Poll discussion",
       });
-    } catch (err) {
-      return interaction.reply(`${err}`);
+    } catch (_err) {
+      return interaction.reply(`${subtext("An error occurred while running this command.")}`);
     }
   }
 }
