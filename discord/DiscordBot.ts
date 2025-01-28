@@ -1,6 +1,6 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
-import { CommandHandler } from "./commandHandler.ts";
+import { CommandHandler } from "./CommandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
 import { findBlueskyHandles } from "$events/findBlueskyHandles.ts";
 import { respondToGoodBot } from "$events/respondToGoodBot.ts";

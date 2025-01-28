@@ -1,6 +1,6 @@
-import type { Command } from "$types/command.ts";
+import type { Command } from "../types/Command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
-import type { DiscordBot } from "./client.ts";
+import type { DiscordBot } from "./DiscordBot.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
 import { CreatePollCommand } from "$commands/createPoll.ts";
