@@ -33,7 +33,6 @@ const extractBlueskyHandles = (text: string): string[] => {
 const fetchBskyProfiles = async (actors: string[]): Promise<GetProfiles> => {
   const url = new URL("https://public.api.bsky.app/xrpc/app.bsky.actor.getProfiles");
   actors.forEach((actor) => {
-    console.log(actor);
     url.searchParams.append("actors", actor);
   });
 
