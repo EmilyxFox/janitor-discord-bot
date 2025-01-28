@@ -8,12 +8,15 @@ on:
 
 jobs:
   notify-discord:
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Notify Discord
+        if: ${{ env.DISCORD_WEBHOOK_URL != 0 }}
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ env.DISCORD_WEBHOOK_URL }}
           DISCORD_AVATAR: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
           DISCORD_EMBEDS: '[{"author": {  "icon_url": "https://avatars.githubusercontent.com/${{ github.actor }}", "name": "${{ github.actor }}", "url": "https://github.com/${{github.actor}}" },"title": "Pull Request Notification","description": "Pull Request [#${{ github.event.pull_request.number }}](${{github.event.pull_request.html_url}}) has been **${{ github.event.action }}**.","color": 5814783,"fields": [{"name": "Title","value": "${{ github.event.pull_request.title }}","inline": true},{"name": "State","value": "${{ github.event.pull_request.state }}","inline": true},{"name": "User","value": "${{ github.event.pull_request.user.login }}","inline": true}],"footer": {"text": "GitHub Actions Bot"},"timestamp": "${{ github.event.pull_request.updated_at }}"}]'
         uses: Ilshidur/action-discord@0.3.2
