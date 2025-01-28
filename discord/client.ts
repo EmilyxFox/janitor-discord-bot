@@ -31,17 +31,18 @@ export class DiscordBot {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
     });
 
-    this.eventHandler.registerEventHandler(Events.InteractionCreate, (interaction) => {
+    this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
       if (interaction.isChatInputCommand()) {
         this.commandHandler.handleCommand(interaction, this);
       }
-    });
+    }]);
 
-    this.eventHandler.registerEventHandler("messageCreate", (message) => {
-      console.log(`[${message.author.displayName}]: ${message.content}`);
-    });
-
-    this.eventHandler.registerEventHandler("messageCreate", findBlueskyHandles);
+    this.eventHandler.registerEventHandler(Events.MessageCreate, [
+      findBlueskyHandles,
+      (message) => {
+        console.log(`[${message.author.displayName}]: ${message.content}`);
+      },
+    ]);
 
     this.eventHandler.startHandling(this.discordClient);
   }
