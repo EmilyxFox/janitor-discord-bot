@@ -1,5 +1,5 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import { env } from "../../utils/env.ts";
+import { env } from "$utils/env.ts";
 
 export const respondToGoodBot = async (message: OmitPartialGroupDMChannel<Message<boolean>>) => {
   if (!message.reference?.messageId) return;
