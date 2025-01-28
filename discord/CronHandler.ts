@@ -13,6 +13,8 @@ export class CronHandler {
 
   public startHandling(): void {
     for (const job of this.cronJobs) {
+      if (job.runImmediately) job.run();
+
       Deno.cron(job.name, job.schedule, job.run);
     }
   }
