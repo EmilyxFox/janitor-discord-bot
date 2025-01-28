@@ -2,7 +2,9 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
 import { CommandHandler } from "./commandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
-import { findBlueskyHandles } from "./events/findBlueskyHandles.ts";
+import { findBlueskyHandles } from "$events/findBlueskyHandles.ts";
+import { respondToGoodBot } from "$events/respondToGoodBot.ts";
+import { env } from "$utils/env.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -31,17 +33,21 @@ export class DiscordBot {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
     });
 
-    this.eventHandler.registerEventHandler(Events.InteractionCreate, (interaction) => {
+    this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
       if (interaction.isChatInputCommand()) {
         this.commandHandler.handleCommand(interaction, this);
       }
-    });
+    }]);
 
-    this.eventHandler.registerEventHandler("messageCreate", (message) => {
-      console.log(`[${message.author.displayName}]: ${message.content}`);
-    });
-
-    this.eventHandler.registerEventHandler("messageCreate", findBlueskyHandles);
+    this.eventHandler.registerEventHandler(Events.MessageCreate, [
+      findBlueskyHandles,
+      respondToGoodBot,
+      (message) => {
+        if (env.DEV) {
+          console.log(`[${message.author.displayName}]: ${message.content}`);
+        }
+      },
+    ]);
 
     this.eventHandler.startHandling(this.discordClient);
   }

@@ -3,7 +3,7 @@ import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
-import { env } from "../utils/env.ts";
+import { env } from "$utils/env.ts";
 
 export class CommandHandler {
   private commands: Command[];
@@ -23,6 +23,7 @@ export class CommandHandler {
   }
 
   registerCommands() {
+    console.log("Registering commands...");
     const commands = this.getSlashCommands();
     this.discordREST
       .put(Routes.applicationCommands(env.CLIENT_ID), {

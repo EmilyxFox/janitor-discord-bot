@@ -26,11 +26,11 @@ export class EventHandler {
     }
   }
 
-  public registerEventHandler<Event extends keyof ClientEvents>(event: Event, listener: (...args: ClientEvents[Event]) => unknown) {
+  public registerEventHandler<Event extends keyof ClientEvents>(event: Event, listener: Array<(...args: ClientEvents[Event]) => unknown>) {
     if (!this.eventHandlers.has(event)) {
       this.eventHandlers.set(event, []);
     }
 
-    this.eventHandlers.get(event)?.push(listener);
+    this.eventHandlers.get(event)?.push(...listener);
   }
 }
