@@ -8,13 +8,13 @@ on:
 
 jobs:
   notify-discord:
-    env: 
+    env:
       discord: ${{ secrets.DISCORD_WEBHOOK }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Notify Discord
-        if: ${{ env.discord }} != ""
+        if: ${{ env.discord != 0 }}
         env:
           DISCORD_WEBHOOK: ${{ env.discord }}
           DISCORD_AVATAR: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
