@@ -3,11 +3,11 @@ import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
 import type { DiscordBot } from "./client.ts";
 import { PingCommand } from "$commands/ping.ts";
 import { BulkDeleteCommand } from "$commands/bulkDelete.ts";
+import { env } from "../utils/env.ts";
 
 export class CommandHandler {
   private commands: Command[];
   private discordREST: REST;
-  private clientId: string;
 
   constructor(token: string) {
     if (!token) {
@@ -16,13 +16,6 @@ export class CommandHandler {
 
     this.commands = [new PingCommand(), new BulkDeleteCommand()];
     this.discordREST = new REST().setToken(token);
-
-    const clientId = Deno.env.get("CLIENT_ID");
-    if (clientId) {
-      this.clientId = clientId;
-    } else {
-      throw new Error("Invalid client or guild ID");
-    }
   }
 
   getSlashCommands() {
@@ -32,7 +25,7 @@ export class CommandHandler {
   registerCommands() {
     const commands = this.getSlashCommands();
     this.discordREST
-      .put(Routes.applicationCommands(this.clientId), {
+      .put(Routes.applicationCommands(env.CLIENT_ID), {
         body: commands,
       })
       .then((data) => {
