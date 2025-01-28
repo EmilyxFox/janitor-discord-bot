@@ -1,4 +1,4 @@
-import type { Command } from "$types/command.ts";
+import type { Command } from "$types/Command.ts";
 import {
   type ChatInputCommandInteraction,
   InteractionContextType,
@@ -9,7 +9,7 @@ import {
   subtext,
   ThreadAutoArchiveDuration,
 } from "discord.js";
-import { DiscordBot } from "../client.ts";
+import { DiscordBot } from "../DiscordBot.ts";
 
 export class CreatePollCommand implements Command {
   data = new SlashCommandBuilder()

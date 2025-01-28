@@ -1,6 +1,6 @@
-import type { Command } from "$types/command.ts";
+import type { Command } from "$types/Command.ts";
 import { type ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import type { DiscordBot } from "../client.ts";
+import type { DiscordBot } from "../DiscordBot.ts";
 
 export class PingCommand implements Command {
   data = new SlashCommandBuilder()
