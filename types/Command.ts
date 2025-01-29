@@ -1,5 +1,5 @@
 import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
-import type { DiscordBot } from "../discord/client.ts";
+import type { DiscordBot } from "../discord/DiscordBot.ts";
 
 export interface Command {
   data:
