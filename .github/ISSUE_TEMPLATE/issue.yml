@@ -6,7 +6,7 @@ assignees: []
 body:
   - type: markdown
     attributes:
-      values: |
+      value: |
         Please fill out the sections to help reproduce and fix the issue.
   - type: textarea
     id: description
@@ -38,4 +38,5 @@ body:
           required: true
         - label: I want to work on this issue
   - type: markdown
-    attributes: Thanks for reporting this issue!
+    attributes:
+      value: Thanks for reporting this issue!
