@@ -37,7 +37,7 @@ export class GitHubCommand implements Command {
         )
     );
 
-  async run(
+  run(
     interaction: ChatInputCommandInteraction,
     _botClient: DiscordBot,
   ): Promise<unknown> {
