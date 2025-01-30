@@ -6,7 +6,7 @@ assignees: ["EmilyxFox"]
 body:
   - type: markdown
     attributes:
-      values: |
+      value: |
         Please fill out the sections to help reproduce and fix the issue.
   - type: textarea
     id: description
@@ -30,12 +30,12 @@ body:
     attributes:
       label: Screenshot or video (optional)
   - type: checkboxes
-    id: terms
+    id: extras
     attributes:
-      label: Extras
+      label: Extra fields
       options:
-        - label: I have checked that this issue doesn't already exist
+        - label: I have made sure that this bug isn't already reported.
           required: true
-        - label: I want to work on this issue
+        -label: I want to work on this issue
   - type: markdown
     attributes: Thanks for reporting this issue!
