@@ -1,0 +1,25 @@
+name: Validate Linting
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  deno-lint-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: 2.1.6
+
+      - name: Check code lint
+        run: |
+          deno lint --compact || (
+            echo "Code linting issues detected. Run 'deno lint --fix' locally to fix them, or fix them manually." && exit 1
+          )
