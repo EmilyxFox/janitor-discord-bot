@@ -82,8 +82,8 @@ services:
   curl -fsSL https://deno.land/install.sh | sh
   ```
 - Discord bot token
-  1. Go to the [Discord Developer Portal](https://discord.dev/) and sign in.
-  2. Open the [applications](https://discord.com/developers/applications) tab and create a new application.
+  1. Go to the **[Discord Developer Portal](https://discord.dev/)** and sign in.
+  2. Open the **[Applications](https://discord.com/developers/applications)** tab and create a new application.
   3. Enable "Presence Intent", "Server Members Intent", and "Message Content Intent" under **Privileged Gateway Intents**
   4. Reset the bot token.
 - [Docker](https://www.docker.com/) for container development
