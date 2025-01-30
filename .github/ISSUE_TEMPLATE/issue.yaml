@@ -1,4 +1,4 @@
-name: Issue
+name: "🐛 Issue"
 description: This form is for bugs and other issues with that bot that arne't critical like making the bot unusable.
 title: "issue title..."
 labels: ["bug"]
