@@ -1,7 +1,11 @@
 import { Client, ClientEvents } from "discord.js";
 
+// Removing this any is too difficult for me :(
+// deno-lint-ignore no-explicit-any
+type EventHandlerMap<Event extends keyof ClientEvents> = Map<Event, Array<(...args: any) => unknown>>;
+
 export class EventHandler {
-  private eventHandlers: Map<keyof ClientEvents, Array<(...args: any) => unknown>>;
+  private eventHandlers: EventHandlerMap<keyof ClientEvents>;
 
   constructor() {
     this.eventHandlers = new Map();

@@ -1,12 +1,7 @@
 name: Build and Publish Docker Image
 
-# on:
-#   release:
-#     types: [published]
 on:
   push:
-    branches:
-      - main
     tags:
       - "v*"
 
@@ -17,6 +12,7 @@ env:
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
   build-and-push-image:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:

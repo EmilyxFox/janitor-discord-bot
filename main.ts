@@ -1,5 +1,6 @@
 import { DiscordBot } from "./discord/DiscordBot.ts";
-import { env } from "./utils/env.ts";
+import { env } from "$utils/env.ts";
+import { attachGracefulShutdownListeners } from "$utils/gracefulShutdown.ts";
 
 console.log("Starting bot...");
 
@@ -9,3 +10,5 @@ const bot = new DiscordBot({
 });
 
 bot.initialise();
+
+attachGracefulShutdownListeners(bot);
