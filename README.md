@@ -74,7 +74,7 @@ services:
 
 - [Deno](https://deno.com/)
   - Windows:
-  ```ps
+  ```powershell
   irm https://deno.land/install.ps1 | iex
   ```
   - Linux/Mac:
@@ -117,7 +117,7 @@ deno install
 cp ./.env.example ./.env
 ```
 
-```ps
+```powershell
 # Windows
 Copy-Item -Path ".\.env.example" -Destination ".\.env"
 ```
