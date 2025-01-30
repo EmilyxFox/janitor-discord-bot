@@ -1,0 +1,41 @@
+name: Critical issue
+description: This form is for critical issues with the bot or related features that require immediate attention.
+title: "[CRITICAL] "
+labels: ["bug"]
+assignees: ["EmilyxFox"]
+body:
+  - type: markdown
+    attributes:
+      values: |
+        Please fill out the sections to help reproduce and fix the issue.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the issue
+      placeholder: "When I do this, this unexpected thing happens..."
+    validations:
+      require: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. send ping command
+        2. pass "test string" in "heartbeat" field
+        2. crash
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshot or video (optional)
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Extras
+      options:
+        - label: I have checked that this issue doesn't already exist
+          required: true
+        - label: I want to work on this issue
+  - type: markdown
+    attributes: Thanks for reporting this issue!
