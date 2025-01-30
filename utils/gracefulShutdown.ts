@@ -3,10 +3,11 @@ import logger from "$logging/logger.ts";
 
 const shutdownGracefully = async (discordBot: DiscordBot) => {
   try {
+    logger.info("Shutting down gracefully...");
     logger.verbose("Destroying Discord client...");
     await discordBot.discordClient.destroy();
 
-    logger.info("Shutting down...");
+    logger.verbose("Bye!");
     Deno.exit(0);
   } catch (_error) {
     logger.warn("There was an error shutting down gracefully. Force closing...");
