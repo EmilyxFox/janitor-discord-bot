@@ -7,6 +7,7 @@ import { respondToGoodBot } from "$events/respondToGoodBot.ts";
 import { env } from "$utils/env.ts";
 import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
+import { handleNoGuilds } from "$events/handleNoGuilds.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -36,6 +37,9 @@ export class DiscordBot {
     this.discordClient.once("ready", () => {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
     });
+    this.eventHandler.registerEventHandler(Events.ClientReady, [
+      handleNoGuilds,
+    ]);
 
     this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
       if (interaction.isChatInputCommand()) {
