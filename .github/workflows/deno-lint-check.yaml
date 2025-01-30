@@ -1,4 +1,4 @@
-name: Validate Formatting
+name: Validate Linting
 
 on:
   pull_request:
@@ -20,33 +20,6 @@ jobs:
 
       - name: Check code lint
         run: |
-          # Capture the output of deno lint --json
-          LINT_RESULTS="$(deno lint --json)"
-
-          # Create GitHub Annotations for each diagnostic
-          echo "$LINT_RESULTS" | jq -c '.diagnostics[]' | while read -r diag; do
-            FILE=$(echo "$diag" | jq -r '.filename' | sed 's|file://||g')
-            LINE=$(echo "$diag" | jq -r '.range.start.line')
-            COL=$(echo "$diag" | jq -r '.range.start.col')
-            MESSAGE=$(echo "$diag" | jq -r '.message')
-            CODE=$(echo "$diag" | jq -r '.code')
-            HINT=$(echo "$diag" | jq -r '.hint')
-
-            # Format hint if available
-            if [ "$HINT" != "null" ]; then
-              MESSAGE="$MESSAGE (Hint: $HINT)"
-            fi
-
-            # Create GitHub annotation
-            echo "::error file=$FILE,line=$LINE,col=$COL,title=$CODE::$MESSAGE"
-          done
-
-          # Generate Markdown Summary
-          echo "## Lint Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| File | Line | Column | Code | Message | Hint |" >> $GITHUB_STEP_SUMMARY
-          echo "|------|------|--------|------|---------|------|" >> $GITHUB_STEP_SUMMARY
-
-          echo "$LINT_RESULTS" | jq -r '.diagnostics[] | 
-            "| \(.filename | sub("^file://"; "")) | \(.range.start.line) | \(.range.start.col) | \(.code) | \(.message | gsub("\\|"; "\\|")) | \(.hint // "N/A") |"' \
-            >> $GITHUB_STEP_SUMMARY
+          deno lint --compact || (
+            echo "Code linting issues detected. Run 'deno lint --fix' locally to fix them, or fix them manually." && exit 1
+          )
