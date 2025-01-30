@@ -1,5 +1,6 @@
 import { EmbedBuilder, Message, OmitPartialGroupDMChannel } from "discord.js";
 import { GetProfiles } from "$types/bluesky.ts";
+import logger from "$logging/logger.ts";
 
 const filterDisallowedTlds = (array: string[]): string[] => {
   const disallowedTlds = [
@@ -42,15 +43,46 @@ const fetchBskyProfiles = async (actors: string[]): Promise<GetProfiles> => {
 };
 
 export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Message<boolean>>) => {
-  const handles = extractBlueskyHandles(message.content);
-  const formatter = Intl.NumberFormat("de-ch"); // German Swiss formatting (22'039'464)
-  if (handles.length < 1) return;
-  if (handles.length > 25) return console.log("Too many handle matches in one message.");
+  if (!message.channel.isSendable()) return;
+  if (message.channel.isDMBased()) return;
 
-  console.log(`Handles found in message: ${handles}`);
+  const handles = extractBlueskyHandles(message.content);
+  if (handles.length < 1) return;
+
+  const childLogger = logger.child({
+    handler: {
+      eventType: "messageCreate",
+      name: "findBlueskyHandles",
+      event: {
+        user: { id: message.author.id, name: message.author.username },
+        guild: { id: message.guildId },
+        message: { id: message.id, content: message.content },
+      },
+    },
+  });
+
+  if (handles.length > 25) {
+    return childLogger.debug(`Too many Bluesky handles found in one message. (${handles.length})`, {
+      data: {
+        handles,
+        length: handles.length,
+      },
+    });
+  }
+
+  childLogger.info(`Bluesky handles found in message`, {
+    data: {
+      handles,
+      length: handles.length,
+    },
+  });
 
   const resp = await fetchBskyProfiles(handles);
   if (resp.profiles.length < 1) return;
+
+  const profileList: { did: string; handle: string }[] = [];
+
+  const formatter = Intl.NumberFormat("de-ch"); // German Swiss formatting (22'039'464)
 
   const embeds: EmbedBuilder[] = [];
   for (const profile of resp.profiles) {
@@ -64,7 +96,16 @@ export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Mess
         { name: "Follows", value: String(formatter.format(profile.followsCount)), inline: true },
       );
     embeds.push(embed);
+    profileList.push({ did: profile.did, handle: profile.handle });
   }
+
+  childLogger.info("Bluesky accounts mentioned in message. Responding with account embed...", {
+    data: {
+      profiles: profileList,
+      handles,
+      length: handles.length,
+    },
+  });
 
   message.channel.send({ embeds });
 };

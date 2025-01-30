@@ -1,8 +1,9 @@
 import { DiscordBot } from "./discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
 import { attachGracefulShutdownListeners } from "$utils/gracefulShutdown.ts";
+import logger from "$logging/logger.ts";
 
-console.log("Starting bot...");
+logger.info("Starting bot...");
 
 const bot = new DiscordBot({
   token: env.DISCORD_TOKEN,

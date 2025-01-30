@@ -7,6 +7,7 @@ import { respondToGoodBot } from "$events/respondToGoodBot.ts";
 import { env } from "$utils/env.ts";
 import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
+import logger from "$logging/logger.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -33,8 +34,12 @@ export class DiscordBot {
   }
 
   private setupEventListeners(): void {
-    this.discordClient.once("ready", () => {
-      console.log(`Logged in as ${this.discordClient.user?.tag}`);
+    this.discordClient.once("ready", (client) => {
+      const guilds: Array<{ guildName: string; guildId: string }> = [];
+      client.guilds.cache.forEach((guild) => {
+        guilds.push({ guildName: guild.name, guildId: guild.id });
+      });
+      logger.info(`Logged in as ${client.user.displayName}`, { client: { tag: client.user.tag, id: client.user.id }, guilds: { guilds } });
     });
 
     this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
@@ -48,7 +53,7 @@ export class DiscordBot {
       respondToGoodBot,
       (message) => {
         if (env.DEV) {
-          console.log(`[${message.author.displayName}]: ${message.content}`);
+          logger.silly(`[${message.author.displayName}]: ${message.content}`);
         }
       },
     ]);
