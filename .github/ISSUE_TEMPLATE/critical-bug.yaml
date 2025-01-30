@@ -1,4 +1,4 @@
-name: Critical issue
+name: "🚨 Critical Issue"
 description: This form is for critical issues with the bot or related features that require immediate attention.
 title: "[CRITICAL] "
 labels: ["bug"]
