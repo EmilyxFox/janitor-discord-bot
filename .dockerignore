@@ -1,3 +1,14 @@
+# Git
 .gitignore
+.gitattributes
+
+# Local env variables
 .env
 .env.*
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Markdown
+*.md
