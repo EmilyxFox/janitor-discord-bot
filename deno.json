@@ -3,12 +3,15 @@
     "dev": "deno run -A --env-file --unstable-cron --watch main.ts"
   },
   "imports": {
+    "@libsql/client": "npm:@libsql/client@^0.14.0",
     "@std/assert": "jsr:@std/assert@1",
     "discord.js": "npm:discord.js@^14.17.3",
     "$types/": "./types/",
     "$commands/": "./discord/commands/",
     "$events/": "./discord/events/",
     "$utils/": "./utils/",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.4",
+    "drizzle-orm": "npm:drizzle-orm@^0.39.1",
     "zod": "npm:zod@^3.24.1"
   },
   "fmt": {
