@@ -5,6 +5,7 @@ import { PingCommand } from "$commands/Ping.ts";
 import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
 import { CreatePollCommand } from "$commands/CreatePoll.ts";
 import { env } from "$utils/env.ts";
+import { GitHubCommand } from "$commands/Github.ts";
 
 export class CommandHandler {
   private commands: Command[];
@@ -15,7 +16,7 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand()];
+    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand()];
     this.discordREST = new REST().setToken(token);
   }
 
