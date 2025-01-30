@@ -10,9 +10,9 @@
       <br>
       <a href="#usage">Contributing</a>
       &middot;
-      <a href="/issues/new?labels=bug&template=bug-report.md">Report Bug</a>
+      <a href="../../issues/new?labels=bug&template=bug-report.md">Report Bug</a>
       &middot;
-      <a href="/issues/new?labels=enhancement&template=feature-request.md">Request Feature</a>
+      <a href="../../issues/new?labels=enhancement&template=feature-request.md">Request Feature</a>
     </p>
 </div>
 
@@ -44,7 +44,7 @@ The bot is written in Typescript to be run on the Deno runtime.
 - [ ] Reaction roles
   - [ ] Set up database
 
-See the [open issues](/issues) for a full list of proposed features (and known issues).
+See the [open issues](../../issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
