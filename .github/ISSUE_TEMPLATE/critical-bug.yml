@@ -30,13 +30,13 @@ body:
     attributes:
       label: Screenshot or video (optional)
   - type: checkboxes
-    id: operating-systems
+    id: extras
     attributes:
-      label: Which operating systems have you used?
-      description: You may select more than one.
+      label: Extra fields
       options:
-        - label: macOS
-        - label: Windows
-        - label: Linux
+        - label: I have made sure that this bug isn't already reported.
+          required: true
+        - label: I want to work on this issue
   - type: markdown
-    attributes: Thanks for reporting this issue!
+    attributes:
+      value: Thanks for reporting this issue!
