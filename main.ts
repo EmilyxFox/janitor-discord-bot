@@ -1,6 +1,6 @@
 import { DiscordBot } from "./discord/DiscordBot.ts";
-import { env } from "./utils/env.ts";
-import { shutdownGracefully } from "$utils/gracefulShutdown.ts";
+import { env } from "$utils/env.ts";
+import { attachGracefulShutdownListeners } from "$utils/gracefulShutdown.ts";
 
 console.log("Starting bot...");
 
@@ -11,5 +11,4 @@ const bot = new DiscordBot({
 
 bot.initialise();
 
-Deno.addSignalListener("SIGTERM", () => shutdownGracefully(bot));
-Deno.addSignalListener("SIGINT", () => shutdownGracefully(bot));
+attachGracefulShutdownListeners(bot);
