@@ -9,6 +9,8 @@
     "$commands/": "./discord/commands/",
     "$events/": "./discord/events/",
     "$utils/": "./utils/",
+    "$logging/": "./logging/",
+    "winston": "npm:winston@^3.17.0",
     "zod": "npm:zod@^3.24.1"
   },
   "fmt": {
