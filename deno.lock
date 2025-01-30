@@ -5,6 +5,7 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@libsql/client@0.14": "0.14.0",
     "npm:discord.js@^14.17.3": "14.17.3",
+    "npm:drizzle-kit@*": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-kit@~0.30.4": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-orm@~0.39.1": "0.39.1_@libsql+client@0.14.0",
     "npm:zod@*": "3.24.1",
