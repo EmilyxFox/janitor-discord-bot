@@ -5,7 +5,7 @@ import { PingCommand } from "$commands/Ping.ts";
 import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
 import { CreatePollCommand } from "$commands/CreatePoll.ts";
 import { env } from "$utils/env.ts";
-import { GitHubCommand } from "$commands/Github.ts";
+import { GitHubCommand } from "$commands/GitHub.ts";
 
 export class CommandHandler {
   private commands: Command[];
