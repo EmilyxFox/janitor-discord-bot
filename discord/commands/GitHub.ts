@@ -8,7 +8,6 @@ import {
   SlashCommandBuilder,
   subtext,
 } from "discord.js";
-import type { DiscordBot } from "../DiscordBot.ts";
 import { env } from "$utils/env.ts";
 
 export class GitHubCommand implements Command {
@@ -37,10 +36,7 @@ export class GitHubCommand implements Command {
         )
     );
 
-  run(
-    interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot,
-  ): Promise<unknown> {
+  run(interaction: ChatInputCommandInteraction): Promise<unknown> {
     const repoUrl = new URL(env.REPO_URL);
     switch (interaction.options.getSubcommandGroup()) {
       case "issues": {
