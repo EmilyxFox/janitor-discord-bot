@@ -1,6 +1,5 @@
 import type { Command } from "$types/Command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
-import type { DiscordBot } from "./DiscordBot.ts";
 import { PingCommand } from "$commands/Ping.ts";
 import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
 import { CreatePollCommand } from "$commands/CreatePoll.ts";
@@ -46,7 +45,6 @@ export class CommandHandler {
 
   async handleCommand(
     interaction: ChatInputCommandInteraction,
-    botClient: DiscordBot,
   ) {
     const commandName = interaction.commandName;
 
@@ -57,7 +55,7 @@ export class CommandHandler {
     if (!matchedCommand) return Promise.reject("Command not found");
 
     await matchedCommand
-      .run(interaction, botClient)
+      .run(interaction)
       .then(() => {
         const logMessage = interaction.options.getSubcommand(false)
           ? `Successfully executed subcommand [/${interaction.commandName} ${interaction.options.getSubcommand()}]`

@@ -8,7 +8,6 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
-import type { DiscordBot } from "../DiscordBot.ts";
 
 export class BulkDeleteCommand implements Command {
   data = new SlashCommandBuilder()
@@ -24,10 +23,7 @@ export class BulkDeleteCommand implements Command {
         .setRequired(true)
     );
 
-  async run(
-    interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot,
-  ): Promise<unknown> {
+  async run(interaction: ChatInputCommandInteraction): Promise<unknown> {
     if (!interaction.channel?.isSendable()) {
       return;
     }

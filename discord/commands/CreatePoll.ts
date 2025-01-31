@@ -9,7 +9,6 @@ import {
   subtext,
   ThreadAutoArchiveDuration,
 } from "discord.js";
-import { DiscordBot } from "../DiscordBot.ts";
 
 export class CreatePollCommand implements Command {
   data = new SlashCommandBuilder()
@@ -38,10 +37,7 @@ export class CreatePollCommand implements Command {
         )
     );
 
-  async run(
-    interaction: ChatInputCommandInteraction,
-    _botClient: DiscordBot,
-  ): Promise<unknown> {
+  async run(interaction: ChatInputCommandInteraction): Promise<unknown> {
     if (!interaction.channel?.isSendable()) {
       return;
     }
