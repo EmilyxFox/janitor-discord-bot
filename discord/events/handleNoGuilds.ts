@@ -11,6 +11,6 @@ export const handleNoGuilds = async (client: Client) => {
       ],
     });
 
-    getLogger(["discord-bot"]).info(`I don't seem to be in any guilds! Use this link to invite me. ${inviteLink}`);
+    getLogger(["discord-bot", "event-handler"]).info(`I don't seem to be in any guilds! Use this link to invite me. ${inviteLink}`);
   }
 };
