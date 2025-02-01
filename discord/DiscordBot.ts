@@ -44,7 +44,7 @@ export class DiscordBot {
 
     this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
       if (interaction.isChatInputCommand()) {
-        this.commandHandler.handleCommand(interaction, this);
+        this.commandHandler.handleCommand(interaction);
       }
     }]);
 
