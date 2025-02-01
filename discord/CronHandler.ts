@@ -1,4 +1,7 @@
 import { CronJob } from "$types/CronJob.ts";
+import { getLogger, withContext } from "@logtape/logtape";
+
+const log = getLogger(["discord-bot", "cron-handler"]);
 
 export class CronHandler {
   private cronJobs: Array<CronJob>;
@@ -12,10 +15,15 @@ export class CronHandler {
   }
 
   public startHandling(): void {
-    for (const job of this.cronJobs) {
-      if (job.runImmediately) job.run();
-
-      Deno.cron(job.name, job.schedule, job.run);
+    log.info("Registering {amount} cron jobs", {
+      jobs: this.cronJobs,
+      amount: this.cronJobs.length,
+    });
+    for (const { name, schedule, runImmediately, run } of this.cronJobs) {
+      withContext({ name, schedule, runImmediately }, () => {
+        if (runImmediately) run();
+        Deno.cron(name, schedule, run);
+      });
     }
   }
 }
