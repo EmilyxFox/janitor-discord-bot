@@ -36,6 +36,7 @@ export class DiscordBot {
   private setupEventListeners(): void {
     this.discordClient.once("ready", () => {
       console.log(`Logged in as ${this.discordClient.user?.tag}`);
+      this.setupCronHandlers();
     });
     this.eventHandler.registerEventHandler(Events.ClientReady, [
       handleNoGuilds,
@@ -57,9 +58,12 @@ export class DiscordBot {
       },
     ]);
 
+    this.eventHandler.startHandling(this.discordClient);
+  }
+
+  private setupCronHandlers(): void {
     if (env.DEV) this.cronHandler.registerCronJob([new TestCronJob()]);
 
-    this.eventHandler.startHandling(this.discordClient);
     this.cronHandler.startHandling();
   }
 }
