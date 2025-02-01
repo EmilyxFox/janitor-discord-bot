@@ -1,10 +1,14 @@
-import { configure, getConsoleSink, getRotatingFileSink } from "@logtape/logtape";
+import { configure, getConsoleSink, getRotatingFileSink, withFilter } from "@logtape/logtape";
 import { AsyncLocalStorage } from "node:async_hooks";
+import { env } from "$utils/env.ts";
 
 await configure({
   contextLocalStorage: new AsyncLocalStorage(),
   sinks: {
-    console: getConsoleSink(),
+    console: withFilter(
+      getConsoleSink(),
+      env.DEV ? "debug" : "info",
+    ),
     coalescedFile: getRotatingFileSink("logs/coalesced.log", {
       maxSize: 0x400 * 0x400, // 1MiB
       maxFiles: 5,
