@@ -9,6 +9,7 @@ import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 import { handleNoGuilds } from "$events/handleNoGuilds.ts";
 import { getLogger, Logger } from "@logtape/logtape";
+import { logMessage } from "$events/logMessage.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -54,12 +55,12 @@ export class DiscordBot {
     this.eventHandler.registerEventHandler(Events.MessageCreate, [
       findBlueskyHandles,
       respondToGoodBot,
-      (message) => {
-        if (env.DEV) {
-          this.log.debug(`[${message.author.displayName}]: ${message.content}`);
-        }
-      },
     ]);
+    if (env.DEV) {
+      this.eventHandler.registerEventHandler(Events.MessageCreate, [
+        logMessage,
+      ]);
+    }
 
     this.eventHandler.startHandling(this.discordClient);
   }
