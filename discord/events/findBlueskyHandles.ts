@@ -49,10 +49,10 @@ export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Mess
   const formatter = Intl.NumberFormat("de-ch"); // German Swiss formatting (22'039'464)
   if (matchedHandles.length < 1) return;
   if (matchedHandles.length > 25) {
-    return log.debug(`Too many Bluesky handles found in one message. ({handles.length})`, { matchedHandles, length: matchedHandles.length });
+    return log.debug(`Too many Bluesky handles found in one message. ({length})`, { matchedHandles, length: matchedHandles.length });
   }
 
-  log.debug(`Handles found in message: {handles}`, { matchedHandles, length: matchedHandles.length });
+  log.debug(`Handles found in message: {length}`, { matchedHandles, length: matchedHandles.length });
 
   const resp = await fetchBskyProfiles(matchedHandles);
   if (resp.profiles.length < 1) return;
