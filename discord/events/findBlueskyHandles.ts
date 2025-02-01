@@ -1,5 +1,8 @@
 import { EmbedBuilder, Message, OmitPartialGroupDMChannel } from "discord.js";
 import { GetProfiles } from "$types/bluesky.ts";
+import { getLogger } from "@logtape/logtape";
+
+const log = getLogger(["discord-bot", "event-handler"]);
 
 const filterDisallowedTlds = (array: string[]): string[] => {
   const disallowedTlds = [
@@ -42,15 +45,23 @@ const fetchBskyProfiles = async (actors: string[]): Promise<GetProfiles> => {
 };
 
 export const findBlueskyHandles = async (message: OmitPartialGroupDMChannel<Message<boolean>>) => {
-  const handles = extractBlueskyHandles(message.content);
+  const matchedHandles = extractBlueskyHandles(message.content);
   const formatter = Intl.NumberFormat("de-ch"); // German Swiss formatting (22'039'464)
-  if (handles.length < 1) return;
-  if (handles.length > 25) return console.log("Too many handle matches in one message.");
+  if (matchedHandles.length < 1) return;
+  if (matchedHandles.length > 25) {
+    return log.debug(`Too many Bluesky handles found in one message. ({handles.length})`, { matchedHandles, length: matchedHandles.length });
+  }
 
-  console.log(`Handles found in message: ${handles}`);
+  log.debug(`Handles found in message: {handles}`, { matchedHandles, length: matchedHandles.length });
 
-  const resp = await fetchBskyProfiles(handles);
+  const resp = await fetchBskyProfiles(matchedHandles);
   if (resp.profiles.length < 1) return;
+
+  log.info(`Bluesky profiles matched in message: {profiles}`, {
+    profiles: resp.profiles.map(({ did, handle }) => ({ did, handle })),
+    length: matchedHandles.length,
+    matchedHandles,
+  });
 
   const embeds: EmbedBuilder[] = [];
   for (const profile of resp.profiles) {

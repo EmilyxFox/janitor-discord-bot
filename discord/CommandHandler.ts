@@ -5,6 +5,9 @@ import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
 import { CreatePollCommand } from "$commands/CreatePoll.ts";
 import { env } from "$utils/env.ts";
 import { GitHubCommand } from "$commands/GitHub.ts";
+import { getLogger, withContext } from "@logtape/logtape";
+
+const log = getLogger(["discord-bot", "command-handler"]);
 
 export class CommandHandler {
   private commands: Command[];
@@ -24,26 +27,27 @@ export class CommandHandler {
   }
 
   registerCommands() {
-    console.log("Registering commands...");
+    log.info("Registering commands...");
     const commands = this.getSlashCommands();
     this.discordREST
       .put(Routes.applicationCommands(env.CLIENT_ID), {
         body: commands,
       })
       .then((data: unknown) => {
-        // Don't really know if this is a good way to do it :)
         if (Array.isArray(data)) {
-          console.log(
-            `Successfully registered ${data.length} global application commands`,
-          );
+          const commands: string[] = data.map((d) => d.name);
+          log.info("Successfully registered {amount} global application commands", {
+            commands,
+            amount: commands.length,
+          });
         }
       })
       .catch((err: unknown) => {
-        console.error("Error registering application (/) commands", err);
+        log.warn("Error registering application (/) commands", { err });
       });
   }
 
-  async handleCommand(
+  handleCommand(
     interaction: ChatInputCommandInteraction,
   ) {
     const commandName = interaction.commandName;
@@ -54,25 +58,31 @@ export class CommandHandler {
 
     if (!matchedCommand) return Promise.reject("Command not found");
 
-    await matchedCommand
-      .run(interaction)
-      .then(() => {
-        const logMessage = interaction.options.getSubcommand(false)
-          ? `Successfully executed subcommand [/${interaction.commandName} ${interaction.options.getSubcommand()}]`
-          : `Successfully executed command [/${interaction.commandName}]`;
-        console.log(logMessage, {
-          guild: { id: interaction.guildId },
-          user: { name: interaction.user.globalName },
-        });
-      })
-      .catch((err) => {
-        console.log(
-          `Error executing command [/${interaction.commandName}]: ${err}`,
-          {
-            guild: { id: interaction.guildId },
-            user: { name: interaction.user.globalName },
-          },
-        );
-      });
+    withContext({
+      interactionId: interaction.id,
+      user: interaction.user.id,
+      guild: interaction.guildId,
+      channel: interaction.channelId,
+      commandName: interaction.commandName,
+      subcommandGroup: interaction.options.getSubcommandGroup(false),
+      subcommand: interaction.options.getSubcommand(false),
+    }, async () => {
+      try {
+        await matchedCommand.run(interaction);
+        let logMessage = `Successfully executed command [/{commandName}`;
+        if (interaction.options.getSubcommandGroup(false)) logMessage += ` {subcommandGroup}`;
+        if (interaction.options.getSubcommand(false)) logMessage += ` {subcommand}`;
+        logMessage += "]";
+        log.info(logMessage);
+      } catch (error) {
+        if (error instanceof Error) {
+          let logMessage = `Error executing command [/{commandName}`;
+          if (interaction.options.getSubcommandGroup(false)) logMessage += ` {subcommandGroup}`;
+          if (interaction.options.getSubcommand(false)) logMessage += ` {subcommand}`;
+          logMessage += "]";
+          log.error(logMessage, { errorMessage: `${error.name} ${error.message}`, errorStack: error.stack });
+        }
+      }
+    });
   }
 }

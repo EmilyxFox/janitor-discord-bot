@@ -1,4 +1,5 @@
 import { Client, OAuth2Scopes, PermissionFlagsBits } from "discord.js";
+import { getLogger } from "@logtape/logtape";
 
 export const handleNoGuilds = async (client: Client) => {
   const guilds = await client.guilds.fetch();
@@ -10,6 +11,6 @@ export const handleNoGuilds = async (client: Client) => {
       ],
     });
 
-    console.log(`I don't seem to be in any guilds! Use this link to invite me. ${inviteLink}`);
+    getLogger(["discord-bot"]).info(`I don't seem to be in any guilds! Use this link to invite me. ${inviteLink}`);
   }
 };

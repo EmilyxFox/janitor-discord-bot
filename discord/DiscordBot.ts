@@ -8,6 +8,7 @@ import { env } from "$utils/env.ts";
 import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 import { handleNoGuilds } from "$events/handleNoGuilds.ts";
+import { getLogger, Logger } from "@logtape/logtape";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -15,6 +16,7 @@ export class DiscordBot {
   commandHandler: CommandHandler;
   eventHandler: EventHandler;
   cronHandler: CronHandler;
+  log: Logger;
   constructor(config: discordClientConfig) {
     this.config = config;
     this.discordClient = new Client({
@@ -24,6 +26,7 @@ export class DiscordBot {
     this.commandHandler = new CommandHandler(this.config.token);
     this.eventHandler = new EventHandler();
     this.cronHandler = new CronHandler();
+    this.log = getLogger(["discord-bot"]);
   }
 
   async initialise(): Promise<void> {
@@ -35,7 +38,7 @@ export class DiscordBot {
 
   private setupEventListeners(): void {
     this.discordClient.once("ready", () => {
-      console.log(`Logged in as ${this.discordClient.user?.tag}`);
+      this.log.info(`Logged in as ${this.discordClient.user?.tag}`);
       this.setupCronHandlers();
     });
     this.eventHandler.registerEventHandler(Events.ClientReady, [
@@ -53,7 +56,7 @@ export class DiscordBot {
       respondToGoodBot,
       (message) => {
         if (env.DEV) {
-          console.log(`[${message.author.displayName}]: ${message.content}`);
+          this.log.debug(`[${message.author.displayName}]: ${message.content}`);
         }
       },
     ]);

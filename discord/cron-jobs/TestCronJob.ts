@@ -1,10 +1,11 @@
 import { CronJob } from "$types/CronJob.ts";
+import { getLogger } from "@logtape/logtape";
 
 export class TestCronJob implements CronJob {
   name = "test";
-  schedule: Deno.CronSchedule = { minute: { every: 1 } };
+  schedule = { minute: { every: 1 } };
   runImmediately = true;
   run(): void | Promise<void> {
-    console.log("ping pong from the test cron job");
+    getLogger(["discord-bot", "cron-handler"]).debug("ping pong from the test cron job");
   }
 }
