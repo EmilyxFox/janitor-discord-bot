@@ -56,6 +56,8 @@ See the [open issues](../../issues) for a full list of proposed features (and kn
 ```yaml
 services:
   bot:
+    # You can pin the version by using a semver tag e.g.:
+    # ghcr.io/emilyxfox/janitor-discord-bot:v0.3.1
     image: ghcr.io/emilyxfox/janitor-discord-bot:latest
     # This example uses an external .env file.
     # The .env file will be read when you run docker compose up
