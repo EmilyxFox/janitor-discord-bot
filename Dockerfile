@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN mkdir logs
+
 RUN deno install --entrypoint main.ts
 
 ENTRYPOINT [ "deno", "run", "-A", "--unstable-cron", "main.ts" ]

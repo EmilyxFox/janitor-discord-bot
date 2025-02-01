@@ -2,6 +2,10 @@
 .gitignore
 .gitattributes
 
+# Logs
+/logs
+*.log
+
 # Local env variables
 .env
 .env.*
