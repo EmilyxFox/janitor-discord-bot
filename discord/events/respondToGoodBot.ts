@@ -10,7 +10,12 @@ export const respondToGoodBot = async (message: OmitPartialGroupDMChannel<Messag
   const repliedTo = await message.channel.messages.fetch(message.reference.messageId)
     .catch((error) => {
       if (error instanceof DiscordAPIError) {
-        if (error.code === 50001) return log.warn("message not found");
+        if (error.code === 10008) {
+          return log.warn("Unknown Message error in respondToGoodBot.ts", {
+            errorMessage: `${error.name} ${error.message}`,
+            errorStack: error.stack,
+          });
+        }
       }
 
       throw error;
