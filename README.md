@@ -44,6 +44,8 @@ The bot is written in Typescript to be run on the Deno runtime.
 - [ ] Logging
 - [ ] Reaction roles
   - [ ] Set up database
+- [ ] Automatic bulk message deletion
+- [ ] Image spoiler enforcement
 
 See the [open issues](../../issues) for a full list of proposed features (and known issues).
 
