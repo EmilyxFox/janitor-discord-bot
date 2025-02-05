@@ -32,19 +32,16 @@ export class EventHandler {
   public startHandling(discordClient: Client) {
     let amount = 0;
     const handlersObject: Partial<Record<keyof ClientEvents, string[]>> = {};
-    this.eventHandlers.each((v, k) => {
-      amount += v.length;
-      handlersObject[k] = v.map((f) => f.name ? f.name : "Anonymous function");
+
+    this.eventHandlers.each((handlers, event) => {
+      amount += handlers.length;
+      handlersObject[event] = handlers.map((f) => f.name || "Anonymous function");
+
+      // Register event listener on the Discord client
+      discordClient.on(event, (...args) => this.handleEvent(event, ...args));
     });
-    log.info("Registering {amount} event handlers", {
-      handlers: handlersObject,
-      amount,
-    });
-    for (const [event] of this.eventHandlers) {
-      discordClient.on(event, (...args) => {
-        this.handleEvent(event, ...args);
-      });
-    }
+
+    log.info("Registered {amount} event handlers", { handlers: handlersObject, amount });
   }
 
   public registerEventHandler<Event extends keyof ClientEvents>(event: Event, listener: Array<(...args: ClientEvents[Event]) => unknown>) {
