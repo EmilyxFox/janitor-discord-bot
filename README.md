@@ -67,6 +67,9 @@ services:
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - CLIENT_ID=${CLIENT_ID}
+    # Bind the /app/logs/ directory to persist logs between container restarts.
+    volumes:
+      - ./logs:/app/logs
     restart: on-failure:3
 ```
 
