@@ -4,10 +4,14 @@ import {
   ButtonBuilder,
   ButtonStyle,
   type ChatInputCommandInteraction,
+  DiscordAPIError,
   MessageActionRowComponentBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
+import { getLogger } from "@logtape/logtape";
+
+const log = getLogger(["discord-bot", "command-handler"]);
 
 export class BulkDeleteCommand implements Command {
   data = new SlashCommandBuilder()
@@ -67,11 +71,27 @@ export class BulkDeleteCommand implements Command {
 
         interaction.channel.bulkDelete(deleteAmount)
           .catch((e) => {
-            if (e.code === 50001) {
-              return interaction.editReply({
-                content: "I do not have permission to delete messages in this channel.",
-                components: [],
-              });
+            if (e instanceof DiscordAPIError) {
+              if (e.code === 50001) {
+                log.warn("Missing Access error in BulkDelete.ts", {
+                  errorMessage: `${e.name} ${e.message}`,
+                  errorStack: e.stack,
+                });
+                return interaction.editReply({
+                  content: "I do not have permission to delete messages in this channel.",
+                  components: [],
+                });
+              }
+              if (e.code === 10008) {
+                log.warn("Unknown Message error in BulkDelete.ts", {
+                  errorMessage: `${e.name} ${e.message}`,
+                  errorStack: e.stack,
+                });
+                return interaction.editReply({
+                  content: "I cannot delete those messages.",
+                  components: [],
+                });
+              }
             }
           });
       } else if (confirmation?.customId === "bulkdeletecancel") {
