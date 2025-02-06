@@ -26,5 +26,6 @@ export const respondToGoodBot = async (message: OmitPartialGroupDMChannel<Messag
 
   if (message.content.toLowerCase() !== "good bot") return;
 
+  log.info(`Responding to good bot.`, { messageId: message.id });
   message.react("❤️");
 };
