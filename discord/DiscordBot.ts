@@ -10,6 +10,7 @@ import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 import { handleNoGuilds } from "$events/handleNoGuilds.ts";
 import { getLogger, Logger } from "@logtape/logtape";
 import { logMessage } from "$events/logMessage.ts";
+import { botReadyHandler } from "$events/ready.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -39,11 +40,11 @@ export class DiscordBot {
 
   private setupEventListeners(): void {
     this.discordClient.once("ready", () => {
-      this.log.info(`Logged in as ${this.discordClient.user?.tag}`);
       this.setupCronHandlers();
     });
     this.eventHandler.registerEventHandler(Events.ClientReady, [
       handleNoGuilds,
+      botReadyHandler,
     ]);
 
     this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
