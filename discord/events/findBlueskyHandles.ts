@@ -20,13 +20,15 @@ const filterDisallowedTlds = (array: string[]): string[] => {
 };
 
 const extractBlueskyHandles = (text: string): string[] => {
-  const blueskyHandleRegex = /(?:^|\s)([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?=\s|$)/g;
+  const blueskyHandleRegex = /(?:^|\s)\@?([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?=\s|$)/g;
 
   const matches = text.match(blueskyHandleRegex);
 
   const noWhitespace = matches?.map((item) => item.trim());
 
-  const onlyUnique = Array.from(new Set(noWhitespace));
+  const noAtSymbol = noWhitespace?.map((item) => item.replace(/^@/, ""));
+
+  const onlyUnique = Array.from(new Set(noAtSymbol));
 
   const noBannedTld = filterDisallowedTlds(onlyUnique);
 
