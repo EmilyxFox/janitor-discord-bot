@@ -11,6 +11,7 @@ import { handleNoGuilds } from "$events/handleNoGuilds.ts";
 import { getLogger, Logger } from "@logtape/logtape";
 import { logMessage } from "$events/logMessage.ts";
 import { botReadyHandler } from "$events/ready.ts";
+import { handleDisconnection } from "$events/handleDisconnection.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -42,6 +43,9 @@ export class DiscordBot {
     this.discordClient.once("ready", () => {
       this.setupCronHandlers();
     });
+    this.eventHandler.registerEventHandler(Events.ShardDisconnect, [
+      handleDisconnection,
+    ]);
     this.eventHandler.registerEventHandler(Events.ClientReady, [
       handleNoGuilds,
       botReadyHandler,
