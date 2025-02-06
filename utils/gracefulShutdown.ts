@@ -1,5 +1,6 @@
 import { getLogger } from "@logtape/logtape";
 import { DiscordBot } from "../discord/DiscordBot.ts";
+import { healthcheckAbortSignalController } from "$utils/healthcheck.ts";
 
 const log = getLogger(["system"]);
 
@@ -8,6 +9,9 @@ const shutdownGracefully = async (discordBot: DiscordBot) => {
   try {
     log.debug("Destroying Discord client...");
     await discordBot.discordClient.destroy();
+
+    log.debug("Aborting healthcheck server...");
+    healthcheckAbortSignalController.abort("shutdown");
 
     log.info("Bye!");
     Deno.exit(0);
