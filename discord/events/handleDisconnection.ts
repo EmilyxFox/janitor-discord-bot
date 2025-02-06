@@ -5,7 +5,7 @@ import { CloseEvent } from "discord.js";
 const log = getLogger(["discord-bot"]);
 
 export const handleDisconnection = (error: CloseEvent) => {
-  log.info(`Discord connection lost...`, { error: error });
+  log.error(`Discord connection lost...`, { error: error });
 
   botStatus.setUnavailable();
 };
