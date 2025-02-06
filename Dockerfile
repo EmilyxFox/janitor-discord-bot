@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apk --no-cache add curl
 
 HEALTHCHECK --interval=1s --timeout=1s --start-period=3s --retries=3 \
-  CMD curl -f http://localhost:8080/healthcheck || exit 1
+  CMD curl -sS -f http://localhost:8080/healthcheck || exit 1
 
 COPY . .
 
