@@ -8,6 +8,7 @@ import { RespondToGoodBot } from "$events/messageCreate/RespondToGoodBot.ts";
 import { HandleNoGuilds } from "$events/ready/HandleNoGuilds.ts";
 import { HandleDisconnection } from "$events/shardDisconnect/HandleDisconnection.ts";
 import { BotLoggedInAndAvailble } from "$events/ready/BecomeAvailable.ts";
+import { env } from "$utils/env.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
@@ -21,12 +22,13 @@ export class EventHandler {
 
     this.addHandlers([
       new FindBlueskyHandles(),
-      new LogMessage(),
       new RespondToGoodBot(),
       new BotLoggedInAndAvailble(),
       new HandleNoGuilds(),
       new HandleDisconnection(),
     ]);
+
+    if (env.DEV) this.addHandlers([new LogMessage()]);
   }
 
   public handleEvent<Event extends keyof ClientEvents>(event: Event, ...args: ClientEvents[Event]) {
