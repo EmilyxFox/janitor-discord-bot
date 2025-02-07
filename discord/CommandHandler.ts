@@ -67,20 +67,18 @@ export class CommandHandler {
       subcommandGroup: interaction.options.getSubcommandGroup(false),
       subcommand: interaction.options.getSubcommand(false),
     }, async () => {
+      const subcommandGroup = interaction.options.getSubcommandGroup(false);
+      const subcommand = interaction.options.getSubcommand(false);
+      const commandDetails = [`/${interaction.commandName}`, subcommandGroup, subcommand].filter(Boolean).join(" ");
       try {
         await matchedCommand.run(interaction);
-        let logMessage = `Successfully executed command [/{commandName}`;
-        if (interaction.options.getSubcommandGroup(false)) logMessage += ` {subcommandGroup}`;
-        if (interaction.options.getSubcommand(false)) logMessage += ` {subcommand}`;
-        logMessage += "]";
-        log.info(logMessage);
+        log.info(`Successfully executed command [${commandDetails}]`);
       } catch (error) {
         if (error instanceof Error) {
-          let logMessage = `Error executing command [/{commandName}`;
-          if (interaction.options.getSubcommandGroup(false)) logMessage += ` {subcommandGroup}`;
-          if (interaction.options.getSubcommand(false)) logMessage += ` {subcommand}`;
-          logMessage += "]";
-          log.error(logMessage, { errorMessage: `${error.name} ${error.message}`, errorStack: error.stack });
+          log.error(`Error executing command [${commandDetails}]`, {
+            errorMessage: `${error.name} ${error.message}`,
+            errorStack: error.stack,
+          });
         }
       }
     });
