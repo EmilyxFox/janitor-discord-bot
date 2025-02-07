@@ -2,16 +2,10 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 import { type discordClientConfig } from "$types/client.ts";
 import { CommandHandler } from "./CommandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
-import { findBlueskyHandles } from "$events/findBlueskyHandles.ts";
-import { respondToGoodBot } from "$events/respondToGoodBot.ts";
 import { env } from "$utils/env.ts";
 import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
-import { handleNoGuilds } from "$events/handleNoGuilds.ts";
 import { getLogger, Logger } from "@logtape/logtape";
-import { logMessage } from "$events/logMessage.ts";
-import { botReadyHandler } from "$events/ready.ts";
-import { handleDisconnection } from "$events/handleDisconnection.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -43,29 +37,11 @@ export class DiscordBot {
     this.discordClient.once("ready", () => {
       this.setupCronHandlers();
     });
-    this.eventHandler.registerEventHandler(Events.ShardDisconnect, [
-      handleDisconnection,
-    ]);
-    this.eventHandler.registerEventHandler(Events.ClientReady, [
-      handleNoGuilds,
-      botReadyHandler,
-    ]);
-
-    this.eventHandler.registerEventHandler(Events.InteractionCreate, [(interaction) => {
+    this.discordClient.on(Events.InteractionCreate, (interaction) => {
       if (interaction.isChatInputCommand()) {
         this.commandHandler.handleCommand(interaction);
       }
-    }]);
-
-    this.eventHandler.registerEventHandler(Events.MessageCreate, [
-      findBlueskyHandles,
-      respondToGoodBot,
-    ]);
-    if (env.DEV) {
-      this.eventHandler.registerEventHandler(Events.MessageCreate, [
-        logMessage,
-      ]);
-    }
+    });
 
     this.eventHandler.startHandling(this.discordClient);
   }
