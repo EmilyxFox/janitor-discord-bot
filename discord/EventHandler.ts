@@ -65,7 +65,8 @@ export class EventHandler {
     log.info("Registered {amount} event handlers", { handlers: handlersObject, amount });
   }
 
-  public addHandlers(handlers: EventHandlerFunction<keyof ClientEvents>[]) {
+  // deno-lint-ignore no-explicit-any
+  public addHandlers(handlers: EventHandlerFunction<any>[]) {
     for (const handler of handlers) {
       if (!this.eventHandlers.has(handler.event)) {
         this.eventHandlers.set(handler.event, []);
