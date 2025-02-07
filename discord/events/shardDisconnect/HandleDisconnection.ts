@@ -9,8 +9,10 @@ export class HandleDisconnection implements EventHandlerFunction<Events.ShardDis
   event = Events.ShardDisconnect as const;
   runOnce: boolean = false;
   run(closeEvent: CloseEvent, _shardId: number) {
-    log.error(`Discord connection lost...`, { error: closeEvent });
-
     botStatus.setUnavailable();
+    // Error code 1000 should indicate a normal closure, and we don't need to log an error for it.
+    if (closeEvent.code !== 1000) {
+      log.error(`Discord connection lost...`, { error: closeEvent });
+    }
   }
 }
