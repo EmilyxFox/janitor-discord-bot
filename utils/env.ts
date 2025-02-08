@@ -10,6 +10,7 @@ const envSchema = z.object({
     .default("GLOBAL"),
   "DEV": z
     .string()
+    .default("FALSE")
     .transform((val) => val.toUpperCase()) // Normalize to uppercase
     .refine((val) => ["TRUE", "FALSE"].includes(val), {
       message: "DEV must be either 'true' or 'false' (case insensitive)",
