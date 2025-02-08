@@ -3,6 +3,12 @@ import { z } from "npm:zod";
 const envSchema = z.object({
   "DISCORD_TOKEN": z.string(),
   "GUILDS": z.string().optional(),
+  "DEPLOY_COMMANDS_TO": z
+    .string()
+    .transform((val) => val.toUpperCase()) // Normalize to uppercase
+    .refine((val) => ["GLOBAL", "GUILDS"].includes(val), {
+      message: "DEPLOY_COMMANDS_TO must be 'GLOBAL' or 'GUILDS' (case insensitive)",
+    }),
   "DEV": z
     .string()
     .transform((val) => val.toUpperCase()) // Normalize to uppercase
