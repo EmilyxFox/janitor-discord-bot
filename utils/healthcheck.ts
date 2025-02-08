@@ -1,4 +1,5 @@
 import { getLogger } from "@logtape/logtape";
+import { Client } from "discord.js";
 
 const log = getLogger(["discord-bot"]);
 
@@ -6,8 +7,10 @@ export const healthcheckAbortSignalController = new AbortController();
 
 class BotStauts {
   public available: boolean;
+  public lastPing: number | null;
   constructor() {
     this.available = false;
+    this.lastPing = null;
   }
 
   public setAvailable() {
@@ -17,19 +20,43 @@ class BotStauts {
   public setUnavailable() {
     this.available = false;
   }
+
+  public updatePing(ping: number | null) {
+    this.lastPing = ping;
+  }
 }
 
 export const botStatus = new BotStauts();
 
-const healthcheckRequestHandler = (request: Request) => {
+const getStatusName = (statusCode: number): string => {
+  switch (statusCode) {
+    case 0:
+      return "Connected";
+    case 1:
+      return "Connecting";
+    case 2:
+      return "Reconnecting";
+    case 3:
+      return "Disconnected";
+    default:
+      return "Unknown";
+  }
+};
+
+const healthcheckRequestHandler = (request: Request, client: Client) => {
   const url = new URL(request.url);
   switch (url.pathname) {
     case "/healthcheck": {
-      if (botStatus.available) {
-        return new Response("OK", { status: 200 });
-      } else {
-        return new Response("Bot unavailable", { status: 503 });
-      }
+      const status = getStatusName(client.ws.status);
+      const respBody = {
+        status,
+        ping: status === "Connected" ? client.ws.ping : null,
+      };
+
+      return new Response(JSON.stringify(respBody), {
+        status: status === "Connected" ? 200 : 503,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     default: {
@@ -38,7 +65,7 @@ const healthcheckRequestHandler = (request: Request) => {
   }
 };
 
-export const serveHealthCheck = () => {
+export const serveHealthCheck = (client: Client) => {
   Deno.serve({
     port: 8080,
     hostname: "0.0.0.0",
@@ -46,6 +73,6 @@ export const serveHealthCheck = () => {
     onListen({ hostname, port }) {
       log.debug(`Serving healthcheck on http://${hostname}:${port}/healthcheck`);
     },
-    handler: healthcheckRequestHandler,
+    handler: (request) => healthcheckRequestHandler(request, client),
   });
 };
