@@ -8,7 +8,8 @@ const envSchema = z.object({
     .transform((val) => val.toUpperCase()) // Normalize to uppercase
     .refine((val) => ["GLOBAL", "GUILDS"].includes(val), {
       message: "DEPLOY_COMMANDS_TO must be 'GLOBAL' or 'GUILDS' (case insensitive)",
-    }),
+    })
+    .pipe(z.enum(["GLOBAL", "GUILDS"])),
   "DEV": z
     .string()
     .transform((val) => val.toUpperCase()) // Normalize to uppercase
