@@ -6,6 +6,7 @@ import { env } from "$utils/env.ts";
 import { CronHandler } from "./CronHandler.ts";
 import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 import { getLogger, Logger } from "@logtape/logtape";
+import { serveHealthCheck } from "$utils/healthcheck.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
@@ -27,6 +28,7 @@ export class DiscordBot {
   }
 
   async initialise(): Promise<void> {
+    serveHealthCheck(this.discordClient);
     this.commandHandler.registerCommands();
     await this.discordClient.login(this.config.token);
 
