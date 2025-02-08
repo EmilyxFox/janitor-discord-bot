@@ -30,7 +30,11 @@ export class DiscordBot {
   async initialise(): Promise<void> {
     serveHealthCheck(this.discordClient);
     await this.discordClient.login(this.config.token);
-    this.commandHandler.registerGlobalCommands();
+    if (env.DEPLOY_COMMANDS_TO === "GLOBAL") {
+      this.commandHandler.registerGlobalCommands();
+    } else if (env.DEPLOY_COMMANDS_TO === "GUILDS") {
+      this.commandHandler.registerGuildCommands();
+    }
 
     this.setupEventListeners();
   }
