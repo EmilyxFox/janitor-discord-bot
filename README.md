@@ -74,7 +74,7 @@ services:
       GUILDS: |-
         1327443723425363754
         1312443867846354378
-        
+
     # Bind the /app/logs/ directory to persist logs between container restarts.
     volumes:
       - ./logs:/app/logs
