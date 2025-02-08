@@ -1,5 +1,4 @@
 import { DiscordAPIError, Events, Message, OmitPartialGroupDMChannel } from "discord.js";
-import { env } from "$utils/env.ts";
 import { getLogger } from "@logtape/logtape";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
@@ -26,7 +25,7 @@ export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCrea
       });
     if (!repliedTo) return;
 
-    if (repliedTo.author.id !== env.CLIENT_ID) return;
+    if (repliedTo.author.id !== message.client.user.id) return;
 
     if (message.content.toLowerCase() !== "good bot") return;
 
