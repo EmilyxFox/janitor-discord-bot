@@ -21,7 +21,7 @@ export class DiscordBot {
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     });
 
-    this.commandHandler = new CommandHandler(this.config.token);
+    this.commandHandler = new CommandHandler(this);
     this.eventHandler = new EventHandler();
     this.cronHandler = new CronHandler();
     this.log = getLogger(["discord-bot"]);
@@ -29,8 +29,8 @@ export class DiscordBot {
 
   async initialise(): Promise<void> {
     serveHealthCheck(this.discordClient);
-    this.commandHandler.registerGlobalCommands();
     await this.discordClient.login(this.config.token);
+    this.commandHandler.registerGlobalCommands();
 
     this.setupEventListeners();
   }

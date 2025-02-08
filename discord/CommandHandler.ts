@@ -1,25 +1,28 @@
 import type { Command } from "$types/Command.ts";
-import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
+import { type ChatInputCommandInteraction, Client, REST, Routes } from "discord.js";
 import { PingCommand } from "$commands/Ping.ts";
 import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
 import { CreatePollCommand } from "$commands/CreatePoll.ts";
 import { env } from "$utils/env.ts";
 import { GitHubCommand } from "$commands/GitHub.ts";
 import { getLogger, withContext } from "@logtape/logtape";
+import { DiscordBot } from "./DiscordBot.ts";
 
 const log = getLogger(["discord-bot", "command-handler"]);
 
 export class CommandHandler {
+  private discordBot: DiscordBot;
   private commands: Command[];
   private discordREST: REST;
 
-  constructor(token: string) {
-    if (!token) {
+  constructor(discordBot: DiscordBot) {
+    this.discordBot = discordBot;
+    if (!discordBot.discordClient.token) {
       throw new Error("Invalid Discord token when registering commands");
     }
 
     this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand()];
-    this.discordREST = new REST().setToken(token);
+    this.discordREST = new REST().setToken(discordBot.discordClient.token);
   }
 
   getSlashCommands() {
@@ -28,9 +31,11 @@ export class CommandHandler {
 
   registerGlobalCommands() {
     log.info("Registering commands globally...");
+    const clientId = this.discordBot.discordClient.user?.id;
+    if (!clientId) throw new Error("No client ID when registering commands");
     const commands = this.getSlashCommands();
     this.discordREST
-      .put(Routes.applicationCommands(env.CLIENT_ID), {
+      .put(Routes.applicationCommands(clientId), {
         body: commands,
       })
       .then((data: unknown) => {
@@ -49,10 +54,12 @@ export class CommandHandler {
 
   public async registerGuildCommands() {
     log.info("Registering guild commands...");
+    const clientId = this.discordBot.discordClient.user?.id;
+    if (!clientId) throw new Error("No client ID when registering commands");
     const commands = this.getSlashCommands();
     const guilds = env.GUILDS?.split("\n") || [];
     for (const guild of guilds) {
-      await this.discordREST.put(Routes.applicationGuildCommands(env.CLIENT_ID, guild), {
+      await this.discordREST.put(Routes.applicationGuildCommands(clientId, guild), {
         body: commands,
       })
         .then((data: unknown) => {
