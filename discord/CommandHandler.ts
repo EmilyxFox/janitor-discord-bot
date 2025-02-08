@@ -58,6 +58,7 @@ export class CommandHandler {
     if (!clientId) throw new Error("No client ID when registering commands");
     const commands = this.getSlashCommands();
     const guilds = env.GUILDS?.split("\n") || [];
+    if (guilds.length < 1) throw new Error("No guilds specified to deploy to.");
     for (const guild of guilds) {
       await this.discordREST.put(Routes.applicationGuildCommands(clientId, guild), {
         body: commands,

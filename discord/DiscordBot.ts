@@ -1,5 +1,4 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import { type discordClientConfig } from "$types/client.ts";
 import { CommandHandler } from "./CommandHandler.ts";
 import { EventHandler } from "./EventHandler.ts";
 import { env } from "$utils/env.ts";
@@ -10,13 +9,13 @@ import { serveHealthCheck } from "$utils/healthcheck.ts";
 
 export class DiscordBot {
   discordClient: Client<boolean>;
-  config: discordClientConfig;
+  private token: string;
   commandHandler: CommandHandler;
   eventHandler: EventHandler;
   cronHandler: CronHandler;
   log: Logger;
-  constructor(config: discordClientConfig) {
-    this.config = config;
+  constructor(token: string) {
+    this.token = token;
     this.discordClient = new Client({
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     });
@@ -29,8 +28,12 @@ export class DiscordBot {
 
   async initialise(): Promise<void> {
     serveHealthCheck(this.discordClient);
-    await this.discordClient.login(this.config.token);
-    this.commandHandler.registerGlobalCommands();
+    await this.discordClient.login(this.token);
+    if (env.DEPLOY_COMMANDS_TO === "GLOBAL") {
+      this.commandHandler.registerGlobalCommands();
+    } else if (env.DEPLOY_COMMANDS_TO === "GUILDS") {
+      this.commandHandler.registerGuildCommands();
+    }
 
     this.setupEventListeners();
   }

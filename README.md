@@ -65,8 +65,16 @@ services:
     # The .env file will be read when you run docker compose up
     # Environment variables can be defined directly here as well
     environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - CLIENT_ID=${CLIENT_ID}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      # You can choose to deploy commands to a list of guilds or globally
+      # The bot defaults to registering commands globally.
+      # If you want to deploy commands to a list of guilds...
+      DEPLOY_COMMANDS_TO: GUILDS
+      # ...you should specify them with this list syntax.
+      GUILDS: |-
+        1327443723425363754
+        1312443867846354378
+
     # Bind the /app/logs/ directory to persist logs between container restarts.
     volumes:
       - ./logs:/app/logs

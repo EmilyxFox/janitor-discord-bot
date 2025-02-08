@@ -10,10 +10,7 @@ const log = getLogger(["system"]);
 
 log.info("Starting bot...");
 
-const bot = new DiscordBot({
-  token: env.DISCORD_TOKEN,
-  clientId: env.CLIENT_ID,
-});
+const bot = new DiscordBot(env.DISCORD_TOKEN);
 
 bot.initialise();
 
