@@ -29,7 +29,7 @@ export class DiscordBot {
 
   async initialise(): Promise<void> {
     serveHealthCheck(this.discordClient);
-    this.commandHandler.registerCommands();
+    this.commandHandler.registerGlobalCommands();
     await this.discordClient.login(this.config.token);
 
     this.setupEventListeners();

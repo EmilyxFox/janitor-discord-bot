@@ -26,8 +26,8 @@ export class CommandHandler {
     return this.commands.map((command: Command) => command.data.toJSON());
   }
 
-  registerCommands() {
-    log.info("Registering commands...");
+  registerGlobalCommands() {
+    log.info("Registering commands globally...");
     const commands = this.getSlashCommands();
     this.discordREST
       .put(Routes.applicationCommands(env.CLIENT_ID), {
@@ -43,8 +43,32 @@ export class CommandHandler {
         }
       })
       .catch((err: unknown) => {
-        log.warn("Error registering application (/) commands", { err });
+        log.warn("Error registering global application (/) commands", { err });
       });
+  }
+
+  public async registerGuildCommands() {
+    log.info("Registering guild commands...");
+    const commands = this.getSlashCommands();
+    const guilds = env.GUILDS?.split("\n") || [];
+    for (const guild of guilds) {
+      await this.discordREST.put(Routes.applicationGuildCommands(env.CLIENT_ID, guild), {
+        body: commands,
+      })
+        .then((data: unknown) => {
+          if (Array.isArray(data)) {
+            const commands: string[] = data.map((d) => d.name);
+            log.info("Successfully registered {amount} guild application commands", {
+              commands,
+              guilds,
+              amount: commands.length,
+            });
+          }
+        })
+        .catch((err: unknown) => {
+          log.warn("Error registering guild application (/) commands", { err });
+        });
+    }
   }
 
   handleCommand(
