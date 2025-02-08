@@ -1,5 +1,4 @@
 import { DiscordAPIError, Events, Message, OmitPartialGroupDMChannel } from "discord.js";
-import { env } from "$utils/env.ts";
 import { getLogger } from "@logtape/logtape";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
