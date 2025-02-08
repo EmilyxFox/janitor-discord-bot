@@ -26,7 +26,7 @@ export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCrea
       });
     if (!repliedTo) return;
 
-    if (repliedTo.author.id !== env.CLIENT_ID) return;
+    if (repliedTo.author.id !== message.client.user.id) return;
 
     if (message.content.toLowerCase() !== "good bot") return;
 
