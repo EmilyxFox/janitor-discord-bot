@@ -7,16 +7,12 @@ import { TestCronJob } from "./cron-jobs/TestCronJob.ts";
 import { getLogger, Logger } from "@logtape/logtape";
 import { serveHealthCheck } from "$utils/healthcheck.ts";
 
-export class DiscordBot {
-  discordClient: Client<boolean>;
-  private token: string;
+export class DiscordBot extends Client {
   commandHandler: CommandHandler;
   eventHandler: EventHandler;
   cronHandler: CronHandler;
-  log: Logger;
-  constructor(token: string) {
-    this.token = token;
-    this.discordClient = new Client({
+  constructor() {
+    super({
       intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     });
 
@@ -27,8 +23,8 @@ export class DiscordBot {
   }
 
   async initialise(): Promise<void> {
-    serveHealthCheck(this.discordClient);
-    await this.discordClient.login(this.token);
+    serveHealthCheck(this);
+    await this.login(env.DISCORD_TOKEN);
     if (env.DEPLOY_COMMANDS_TO === "GLOBAL") {
       this.commandHandler.registerGlobalCommands();
     } else if (env.DEPLOY_COMMANDS_TO === "GUILDS") {
