@@ -11,18 +11,18 @@ import { DiscordBot } from "./DiscordBot.ts";
 const log = getLogger(["discord-bot", "command-handler"]);
 
 export class CommandHandler {
-  private discordBot: DiscordBot;
-  private commands: Command[];
-  private discordREST: REST;
+  public readonly client: DiscordBot;
+  public readonly commands: Command[];
+  private readonly discordREST: REST;
 
   constructor(discordBot: DiscordBot) {
-    this.discordBot = discordBot;
-    if (!discordBot.discordClient.token) {
+    this.client = discordBot;
+    if (!discordBot.token) {
       throw new Error("Invalid Discord token when registering commands");
     }
 
     this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand()];
-    this.discordREST = new REST().setToken(discordBot.discordClient.token);
+    this.discordREST = new REST().setToken(discordBot.token);
   }
 
   getSlashCommands() {
@@ -31,7 +31,7 @@ export class CommandHandler {
 
   registerGlobalCommands() {
     log.info("Registering commands globally...");
-    const clientId = this.discordBot.discordClient.user?.id;
+    const clientId = this.client.user?.id;
     if (!clientId) throw new Error("No client ID when registering commands");
     const commands = this.getSlashCommands();
     this.discordREST
@@ -54,7 +54,7 @@ export class CommandHandler {
 
   public async registerGuildCommands() {
     log.info("Registering guild commands...");
-    const clientId = this.discordBot.discordClient.user?.id;
+    const clientId = this.client.user?.id;
     if (!clientId) throw new Error("No client ID when registering commands");
     const commands = this.getSlashCommands();
     const guilds = env.GUILDS?.split("\n") || [];
@@ -107,7 +107,7 @@ export class CommandHandler {
         log.info(`Successfully executed command [${commandDetails}]`);
       } catch (error) {
         if (error instanceof Error) {
-          log.error(`Error executing command [${commandDetails}]`, {
+          log.error(`Error executing command [${commandDetails}] {errorMessage}`, {
             errorMessage: `${error.name} ${error.message}`,
             errorStack: error.stack,
           });

@@ -1,12 +1,15 @@
 import { CronJob } from "$types/CronJob.ts";
 import { getLogger, withContext } from "@logtape/logtape";
+import { DiscordBot } from "./DiscordBot.ts";
 
 const log = getLogger(["discord-bot", "cron-handler"]);
 
 export class CronHandler {
   private cronJobs: Array<CronJob>;
+  public client: DiscordBot;
 
-  public constructor() {
+  public constructor(client: DiscordBot) {
+    this.client = client;
     this.cronJobs = [];
   }
 

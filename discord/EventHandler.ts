@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Collection } from "discord.js";
+import { ClientEvents, Collection } from "discord.js";
 import { getLogger, withContext } from "@logtape/logtape";
 import { nanoid } from "nanoid";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
@@ -9,6 +9,8 @@ import { HandleNoGuilds } from "$events/ready/HandleNoGuilds.ts";
 import { HandleDisconnection } from "$events/shardDisconnect/HandleDisconnection.ts";
 import { BotLoggedInAndAvailble } from "$events/ready/BecomeAvailable.ts";
 import { env } from "$utils/env.ts";
+import { HandleCommand } from "$events/interactionCreate/HandleCommand.ts";
+import { DiscordBot } from "./DiscordBot.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
@@ -16,9 +18,11 @@ type EventHandlerMap<Event extends keyof ClientEvents> = Collection<Event, Array
 
 export class EventHandler {
   private eventHandlers: EventHandlerMap<keyof ClientEvents>;
+  public client: DiscordBot;
 
-  constructor() {
+  constructor(client: DiscordBot) {
     this.eventHandlers = new Collection();
+    this.client = client;
 
     this.addHandlers([
       new FindBlueskyHandles(),
@@ -26,6 +30,7 @@ export class EventHandler {
       new BotLoggedInAndAvailble(),
       new HandleNoGuilds(),
       new HandleDisconnection(),
+      new HandleCommand(),
     ]);
 
     if (env.DEV) this.addHandlers([new LogMessage()]);
@@ -53,7 +58,7 @@ export class EventHandler {
     }
   }
 
-  public startHandling(discordClient: Client) {
+  public startHandling() {
     let amount = 0;
     const handlersObject: Partial<Record<keyof ClientEvents, string[]>> = {};
 
@@ -61,7 +66,7 @@ export class EventHandler {
       amount += handlers.length;
       handlersObject[event] = handlers.map((f) => f.constructor.name);
 
-      discordClient.on(event, (...args) => this.handleEvent(event, ...args));
+      this.client.on(event, (...args) => this.handleEvent(event, ...args));
     });
 
     log.info("Registered {amount} event handlers", { handlers: handlersObject, amount });
