@@ -27,6 +27,6 @@ export class DiscordBot extends Client {
       this.commandHandler.registerGuildCommands();
     }
 
-    this.eventHandler.startHandling(this);
+    this.eventHandler.startHandling();
   }
 }

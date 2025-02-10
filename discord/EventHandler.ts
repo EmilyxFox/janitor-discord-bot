@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Collection } from "discord.js";
+import { ClientEvents, Collection } from "discord.js";
 import { getLogger, withContext } from "@logtape/logtape";
 import { nanoid } from "nanoid";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
