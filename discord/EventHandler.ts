@@ -58,7 +58,7 @@ export class EventHandler {
     }
   }
 
-  public startHandling(discordClient: Client) {
+  public startHandling() {
     let amount = 0;
     const handlersObject: Partial<Record<keyof ClientEvents, string[]>> = {};
 
@@ -66,7 +66,7 @@ export class EventHandler {
       amount += handlers.length;
       handlersObject[event] = handlers.map((f) => f.constructor.name);
 
-      discordClient.on(event, (...args) => this.handleEvent(event, ...args));
+      this.client.on(event, (...args) => this.handleEvent(event, ...args));
     });
 
     log.info("Registered {amount} event handlers", { handlers: handlersObject, amount });
