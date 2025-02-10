@@ -8,7 +8,7 @@ const shutdownGracefully = async (discordBot: DiscordBot) => {
   log.info("Shutting down gracefully...");
   try {
     log.debug("Destroying Discord client...");
-    await discordBot.discordClient.destroy();
+    await discordBot.destroy();
 
     log.debug("Aborting healthcheck server...");
     healthcheckAbortSignalController.abort("shutdown");
