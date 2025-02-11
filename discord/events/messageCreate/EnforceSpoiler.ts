@@ -22,7 +22,6 @@ export class EnforceSpoiler implements EventHandlerFunction<Events.MessageCreate
     if (message.attachments.size <= 0) return;
 
     const filteredAttachments: Attachment[] = [];
-    console.log(message.attachments);
     message.attachments.forEach((a) => {
       if (a.name.startsWith("SPOILER_")) return;
 
