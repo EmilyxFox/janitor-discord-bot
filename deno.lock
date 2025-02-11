@@ -2,8 +2,6 @@
   "version": "4",
   "specifiers": {
     "jsr:@logtape/logtape@0.8": "0.8.0",
-    "jsr:@std/assert@1": "1.0.10",
-    "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@libsql/client@0.14": "0.14.0",
     "npm:discord.js@^14.17.3": "14.17.3",
     "npm:drizzle-kit@*": "0.30.4_esbuild@0.19.12",
@@ -16,15 +14,6 @@
   "jsr": {
     "@logtape/logtape@0.8.0": {
       "integrity": "12bdf406a713f754d99c2ff65deb45127ce4e2c59e7136d608042250629428bd"
-    },
-    "@std/assert@1.0.10": {
-      "integrity": "59b5cbac5bd55459a19045d95cc7c2ff787b4f8527c0dd195078ff6f9481fbb3",
-      "dependencies": [
-        "jsr:@std/internal"
-      ]
-    },
-    "@std/internal@1.0.5": {
-      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
     }
   },
   "npm": {
@@ -540,7 +529,6 @@
   "workspace": {
     "dependencies": [
       "jsr:@logtape/logtape@0.8",
-      "jsr:@std/assert@1",
       "npm:@libsql/client@0.14",
       "npm:discord.js@^14.17.3",
       "npm:drizzle-kit@~0.30.4",
