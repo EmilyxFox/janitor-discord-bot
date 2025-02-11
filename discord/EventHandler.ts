@@ -11,6 +11,7 @@ import { BotLoggedInAndAvailble } from "$events/ready/BecomeAvailable.ts";
 import { env } from "$utils/env.ts";
 import { HandleCommand } from "$events/interactionCreate/HandleCommand.ts";
 import { DiscordBot } from "./DiscordBot.ts";
+import { EnforceSpoiler } from "$events/messageCreate/EnforceSpoiler.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
@@ -31,6 +32,7 @@ export class EventHandler {
       new HandleNoGuilds(),
       new HandleDisconnection(),
       new HandleCommand(),
+      new EnforceSpoiler(),
     ]);
 
     if (env.DEV) this.addHandlers([new LogMessage()]);
