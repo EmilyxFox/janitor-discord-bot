@@ -92,6 +92,18 @@ services:
       - ./data/libsql:/var/lib/sqld
 ```
 
+### Environment variables
+
+| Environment Variable   | Description                                                                                                                | Required / Default                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **DISCORD_TOKEN**      | The Discord bot token used for authentication.                                                                             | **Required**                          |
+| **DEPLOY_COMMANDS_TO** | Specifies the deployment target for commands. Accepts either `GLOBAL` or `GUILDS` (case insensitive).                      | Optional, defaults to `GLOBAL`        |
+| **GUILDS**             | A newline-separated (`\n`) list of guild IDs where commands will be deployed (if `DEPLOY_COMMANDS_TO` is set to `GUILDS`). | **Optional** (no default)             |
+| **DB_URL**             | The URL for connecting to the database. Must be a valid URL.                                                               | **Required**                          |
+| **DB_AUTH**            | Database authentication credentials (if needed).                                                                           | **Optional** (no default)             |
+| **DEV**                | Flag indicating development mode. Accepts `"true"` or `"false"` (case insensitive).                                        | Optional, defaults to `false`         |
+| **REPO_URL**           | The URL of the repository.                                                                                                 | Optional, defaults to this repository |
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contibuting
