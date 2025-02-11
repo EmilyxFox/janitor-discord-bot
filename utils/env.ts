@@ -8,6 +8,8 @@ const envSchema = z.object({
     .transform((val) => val.toUpperCase())
     .pipe(z.enum(["GLOBAL", "GUILDS"]))
     .default("GLOBAL"),
+  "DB_URL": z.string().url(),
+  "DB_AUTH": z.string().optional(),
   "DEV": z
     .string()
     .default("FALSE")
