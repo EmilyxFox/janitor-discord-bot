@@ -47,8 +47,8 @@ export class EnforceSpoiler implements EventHandlerFunction<Events.MessageCreate
         )
         .setTimestamp()
         .setFooter({
-          text: message.client.user.username,
-          iconURL: message.client.user.avatarURL({ size: 32 }) || "https://cdn.discordapp.com/embed/avatars/1.png",
+          text: message.author.username,
+          iconURL: message.author.avatarURL({ size: 32 }) || "https://cdn.discordapp.com/embed/avatars/1.png",
         });
       message.channel.send({ embeds: [embed] });
 
