@@ -66,6 +66,8 @@ services:
     # Environment variables can be defined directly here as well
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
+      # You can use the service name instead of an IP
+      DB_URL: http://db:8080/
       # You can choose to deploy commands to a list of guilds or globally
       # The bot defaults to registering commands globally.
       # If you want to deploy commands to a list of guilds...
@@ -74,11 +76,20 @@ services:
       GUILDS: |-
         1327443723425363754
         1312443867846354378
-
     # Bind the /app/logs/ directory to persist logs between container restarts.
     volumes:
       - ./logs:/app/logs
     restart: on-failure:3
+
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+    environment:
+      - SQLD_NODE=primary
+    volumes:
+      - ./data/libsql:/var/lib/sqld
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
