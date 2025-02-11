@@ -4,3 +4,6 @@
 # Logs
 logs/
 *.log
+
+# NPM Emulation
+node_modules/

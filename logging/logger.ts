@@ -40,6 +40,11 @@ export const setupLogging = async () => {
         maxFiles: 5,
         formatter: (record) => JSON.stringify(record) + "\n",
       }),
+      databaseFile: getRotatingFileSink("logs/database.log", {
+        maxSize: 0x400 * 0x400, // 1MiB
+        maxFiles: 5,
+        formatter: (record) => JSON.stringify(record) + "\n",
+      }),
     },
     loggers: [
       { category: ["system"], lowestLevel: "debug", sinks: ["console", "coalescedFile", "systemFile"] },
@@ -48,6 +53,7 @@ export const setupLogging = async () => {
       { category: ["discord-bot", "cron-handler"], lowestLevel: "debug", sinks: ["cronHandlerFile"] },
       { category: ["discord-bot", "event-handler"], lowestLevel: "debug", sinks: ["eventHandlerFile"] },
       { category: ["logtape", "meta"], lowestLevel: "warning", sinks: ["console"] },
+      { category: ["database"], lowestLevel: "debug", sinks: ["databaseFile"] },
     ],
   });
 };
