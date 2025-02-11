@@ -16,3 +16,6 @@ Dockerfile
 
 # Markdown
 *.md
+
+# NPM
+node_modules
