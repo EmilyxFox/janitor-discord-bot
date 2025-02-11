@@ -45,7 +45,7 @@ export class EventHandler {
     const persistentHandlers: Array<EventHandlerFunction<keyof ClientEvents>> = [];
 
     for (const handler of handlers) {
-      withContext({ id: nanoid() }, () => {
+      withContext({ eventId: nanoid() }, () => {
         handler.run(...args);
       });
       if (!handler.runOnce) {
