@@ -1,0 +1,28 @@
+services:
+  bot:
+    build: .
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    volumes:
+      - discord-logs:/app/logs
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DEPLOY_COMMANDS_TO: GUILDS
+      GUILDS: ${GUILDS}
+      DB_URL: http://db:8080
+    restart: unless-stopped
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    platform: linux/amd64
+    ports:
+      - 8080:8080
+    environment:
+      - SQLD_NODE=primary
+    volumes:
+      - libsql:/var/lib/sqld
+
+volumes:
+  discord-logs:
+  libsql:
