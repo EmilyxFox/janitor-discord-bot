@@ -52,6 +52,12 @@ export class EnforceSpoiler implements EventHandlerFunction<Events.MessageCreate
           iconURL: message.client.user.avatarURL({ size: 32 }) || "https://cdn.discordapp.com/embed/avatars/1.png",
         });
       message.channel.send({ embeds: [embed] });
+
+      log.info("Non-spoilered media sent in spoiler-enforced channel.", {
+        channel: message.channelId,
+        user: message.author.id,
+        message: message.id,
+      });
     }
   }
 }
