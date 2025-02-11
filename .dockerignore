@@ -1,6 +1,7 @@
 # Git
 .gitignore
 .gitattributes
+.mailmap
 
 # Logs
 /logs
