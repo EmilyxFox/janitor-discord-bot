@@ -1,17 +1,17 @@
 import { ClientEvents, Collection } from "discord.js";
+import { DiscordBot } from "$discord/DiscordBot.ts";
+import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
 import { nanoid } from "nanoid";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
-import { FindBlueskyHandles } from "$events/messageCreate/FindBlueskyHandles.ts";
-import { LogMessage } from "$events/messageCreate/LogMessage.ts";
-import { RespondToGoodBot } from "$events/messageCreate/RespondToGoodBot.ts";
-import { HandleNoGuilds } from "$events/ready/HandleNoGuilds.ts";
-import { HandleDisconnection } from "$events/shardDisconnect/HandleDisconnection.ts";
-import { BotLoggedInAndAvailble } from "$events/ready/BecomeAvailable.ts";
-import { env } from "$utils/env.ts";
-import { HandleCommand } from "$events/interactionCreate/HandleCommand.ts";
-import { DiscordBot } from "./DiscordBot.ts";
-import { EnforceSpoiler } from "$events/messageCreate/EnforceSpoiler.ts";
+import { FindBlueskyHandles } from "$discord/events/messageCreate/FindBlueskyHandles.ts";
+import { LogMessage } from "$discord/events/messageCreate/LogMessage.ts";
+import { RespondToGoodBot } from "$discord/events/messageCreate/RespondToGoodBot.ts";
+import { HandleNoGuilds } from "$discord/events/ready/HandleNoGuilds.ts";
+import { HandleDisconnection } from "$discord/events/shardDisconnect/HandleDisconnection.ts";
+import { BotLoggedInAndAvailble } from "$discord/events/ready/BecomeAvailable.ts";
+import { HandleCommand } from "$discord/events/interactionCreate/HandleCommand.ts";
+import { EnforceSpoiler } from "$discord/events/messageCreate/EnforceSpoiler.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 

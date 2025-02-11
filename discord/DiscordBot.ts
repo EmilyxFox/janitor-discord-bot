@@ -1,8 +1,8 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { CommandHandler } from "./CommandHandler.ts";
-import { EventHandler } from "./EventHandler.ts";
 import { env } from "$utils/env.ts";
-import { CronHandler } from "./CronHandler.ts";
+import { EventHandler } from "$discord/EventHandler.ts";
+import { CommandHandler } from "$discord/CommandHandler.ts";
+import { CronHandler } from "$discord/CronHandler.ts";
 import { serveHealthCheck } from "$utils/healthcheck.ts";
 
 export class DiscordBot extends Client {

@@ -1,8 +1,8 @@
 import { Client, Events } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
-import { DiscordBot } from "../../DiscordBot.ts";
+import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
-import { TestCronJob } from "../../cron-jobs/TestCronJob.ts";
+import { TestCronJob } from "$discord/cron-jobs/TestCronJob.ts";
 
 export class StartCronJobs implements EventHandlerFunction<Events.ClientReady> {
   event = Events.ClientReady as const;

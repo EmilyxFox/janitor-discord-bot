@@ -1,8 +1,8 @@
 import { getLogger } from "@logtape/logtape";
 import { Attachment, EmbedBuilder, Events, Message, OmitPartialGroupDMChannel, subtext } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
-import { db } from "../../../database/database.ts";
-import { spoilerEnforcedChannels } from "../../../database/schema.ts";
+import { db } from "$database/database.ts";
+import { spoilerEnforcedChannels } from "$database/schema.ts";
 import { eq } from "drizzle-orm/expressions";
 
 const log = getLogger(["discord-bot", "event-handler"]);

@@ -1,13 +1,13 @@
-import type { Command } from "$types/Command.ts";
 import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
-import { PingCommand } from "$commands/Ping.ts";
-import { BulkDeleteCommand } from "$commands/BulkDelete.ts";
-import { CreatePollCommand } from "$commands/CreatePoll.ts";
+import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
-import { GitHubCommand } from "$commands/GitHub.ts";
 import { getLogger, withContext } from "@logtape/logtape";
-import { DiscordBot } from "./DiscordBot.ts";
-import { EnforceSpoiler } from "$commands/EnforceSpoiler.ts";
+import type { Command } from "$types/Command.ts";
+import { PingCommand } from "$discord/commands/Ping.ts";
+import { BulkDeleteCommand } from "$discord/commands/BulkDelete.ts";
+import { CreatePollCommand } from "$discord/commands/CreatePoll.ts";
+import { GitHubCommand } from "$discord/commands/GitHub.ts";
+import { EnforceSpoiler } from "$discord/commands/EnforceSpoiler.ts";
 
 const log = getLogger(["discord-bot", "command-handler"]);
 

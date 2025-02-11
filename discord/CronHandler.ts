@@ -1,6 +1,6 @@
+import { DiscordBot } from "$discord/DiscordBot.ts";
 import { CronJob } from "$types/CronJob.ts";
 import { getLogger, withContext } from "@logtape/logtape";
-import { DiscordBot } from "./DiscordBot.ts";
 
 const log = getLogger(["discord-bot", "cron-handler"]);
 

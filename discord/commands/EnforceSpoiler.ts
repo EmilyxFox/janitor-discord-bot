@@ -11,8 +11,8 @@ import {
   subtext,
   userMention,
 } from "discord.js";
-import { db } from "../../database/database.ts";
-import { spoilerEnforcedChannels } from "../../database/schema.ts";
+import { db } from "$database/database.ts";
+import { spoilerEnforcedChannels } from "$database/schema.ts";
 import { getLogger } from "@logtape/logtape";
 import { eq } from "drizzle-orm/expressions";
 import { LibsqlError } from "@libsql/client";

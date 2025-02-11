@@ -1,6 +1,6 @@
 import { CacheType, Events, Interaction } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
-import { DiscordBot } from "../../DiscordBot.ts";
+import { DiscordBot } from "$discord/DiscordBot.ts";
 
 export class HandleCommand implements EventHandlerFunction<Events.InteractionCreate> {
   event = Events.InteractionCreate as const;
