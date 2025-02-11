@@ -1,5 +1,5 @@
 import { getLogger } from "@logtape/logtape";
-import { DiscordBot } from "../discord/DiscordBot.ts";
+import { DiscordBot } from "$discord/DiscordBot.ts";
 import { healthcheckAbortSignalController } from "$utils/healthcheck.ts";
 
 const log = getLogger(["system"]);
