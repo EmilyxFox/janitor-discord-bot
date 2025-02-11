@@ -3,7 +3,7 @@ import { DiscordBot } from "./discord/DiscordBot.ts";
 import { attachGracefulShutdownListeners } from "$utils/gracefulShutdown.ts";
 import { getLogger } from "@logtape/logtape";
 import { migrate } from "drizzle-orm/libsql/migrator";
-import { db } from "./database/database.ts";
+import { db } from "$database/database.ts";
 
 await setupLogging();
 
