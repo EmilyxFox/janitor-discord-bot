@@ -7,6 +7,7 @@ import { env } from "$utils/env.ts";
 import { GitHubCommand } from "$commands/GitHub.ts";
 import { getLogger, withContext } from "@logtape/logtape";
 import { DiscordBot } from "./DiscordBot.ts";
+import { EnforceSpoiler } from "$commands/EnforceSpoiler.ts";
 
 const log = getLogger(["discord-bot", "command-handler"]);
 
@@ -21,7 +22,7 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand()];
+    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand(), new EnforceSpoiler()];
     this.discordREST = new REST().setToken(discordBot.token);
   }
 
