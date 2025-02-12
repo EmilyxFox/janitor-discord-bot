@@ -84,8 +84,11 @@ services:
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
-    ports:
-      - "8080:8080"
+    # Unless you need to access the DB from the host system
+    # you don't need to bind any ports.
+    # If you need this it might be a good idea to also configure auth.
+    #ports:
+    #  - "8080:8080"
     environment:
       - SQLD_NODE=primary
     volumes:
