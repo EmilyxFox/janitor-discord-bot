@@ -61,6 +61,7 @@ services:
     # You can pin the version by using a semver tag e.g.:
     # ghcr.io/emilyxfox/janitor-discord-bot:v0.3.1
     image: ghcr.io/emilyxfox/janitor-discord-bot:latest
+    restart: unless-stopped
     # This example uses an external .env file.
     # The .env file will be read when you run docker compose up
     # Environment variables can be defined directly here as well
@@ -79,11 +80,11 @@ services:
     # Bind the /app/logs/ directory to persist logs between container restarts.
     volumes:
       - ./logs:/app/logs
-    restart: on-failure:3
 
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
+    restart: unless-stopped
     # Unless you need to access the DB from the host system
     # you don't need to bind any ports.
     # If you need this it might be a good idea to also configure auth.

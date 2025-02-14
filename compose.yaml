@@ -16,6 +16,7 @@ services:
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
+    restart: unless-stopped
     ports:
       - 8080:8080
     environment:
