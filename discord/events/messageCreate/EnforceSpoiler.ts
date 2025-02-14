@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm/expressions";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
-const filteredTypes = new Set(["video/mp4", "video/webm", "image/jpeg", "image/gif", "image/png"]);
+const filteredTypes = new Set(["video/mp4", "video/webm", "image/jpeg", "image/gif", "image/png", "image/webp"]);
 
 const checkIfSpoilerEnforced = async (channelId: string) => {
   const [result] = await db.select().from(spoilerEnforcedChannels)
