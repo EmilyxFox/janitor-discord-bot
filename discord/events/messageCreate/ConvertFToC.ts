@@ -25,7 +25,6 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
     let response = message.content;
 
     for (const match of matches) {
-      console.log(match);
       // Extract the numeric value
       const fahrenheit = parseInt(match.replace(/[Ff]/, ""));
       // Convert to Celsius
