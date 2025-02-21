@@ -13,7 +13,8 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
     log.debug(`Processing message from ${message.author.displayName}: ${message.content}`);
 
     // Regular expression to match temperatures in Fahrenheit
-    const regex = /\b[0-9]{1,3}\s?[Ff]\b/g;
+    // const regex = /\b[0-9]{1,3}\s?[Ff]\b/g;
+    const regex = /(?:^|\s)-[0-9]{1,3}\s?[Ff]\b|\b[0-9]{1,3}\s?[Ff]\b/g;
     const matches = message.content.match(regex);
 
     if (!matches) {
@@ -24,6 +25,7 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
     let response = message.content;
 
     for (const match of matches) {
+      console.log(match);
       // Extract the numeric value
       const fahrenheit = parseInt(match.replace(/[Ff]/, ""));
       // Convert to Celsius
@@ -32,10 +34,7 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
       log.debug(`Converting ${fahrenheit}F to ${celsius}C`);
 
       // Replace the Fahrenheit temperature with both F and C
-      response = response.replace(
-        match,
-        `${bold(`${celsius}°C`)}\n${subtext(`${fahrenheit}°F`)}`,
-      );
+      response = `${bold(`${celsius}°C`)}\n${subtext(`${fahrenheit}°F`)}`;
     }
 
     //test
