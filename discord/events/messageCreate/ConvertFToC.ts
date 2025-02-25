@@ -14,7 +14,7 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
 
     // Regular expression to match temperatures in Fahrenheit
     // const regex = /\b[0-9]{1,3}\s?[Ff]\b/g;
-    const regex = /(?:^|\s)-[0-9]{1,3}\s?[Ff]\b|\b[0-9]{1,3}\s?[Ff]\b/g;
+    const regex = /(?:^|\s)-[0-9]{1,3}\s?[Ff]\s|\b[0-9]{1,3}\s?[Ff]\s/g;
     const matches = message.content.match(regex);
 
     if (!matches) {
