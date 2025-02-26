@@ -51,7 +51,8 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
           const repliedMessage = await interaction.channel.messages.fetch(repliedMessageId);
           if (repliedMessage.author.id === interaction.user.id) {
             return await dismissMessage(interaction);
-          } else if (interaction.inGuild()) {
+          }
+          if (interaction.inGuild()) {
             const user = await interaction.guild?.members.fetch(interaction.user.id);
             if (!user) {
               return interaction.reply({
@@ -62,14 +63,11 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
             if (user.permissionsIn(interaction.channelId).has(PermissionFlagsBits.ManageMessages)) {
               await dismissMessage(interaction);
             }
-          } else {
-            return interaction.reply({
-              content: "This message can only be dismissed by the user who triggered it or an admin.",
-              flags: MessageFlags.Ephemeral,
-            });
           }
-
-          break;
+          return interaction.reply({
+            content: "This message can only be dismissed by the user who triggered it or an admin.",
+            flags: MessageFlags.Ephemeral,
+          });
         }
         case "any": {
           await dismissMessage(interaction);
