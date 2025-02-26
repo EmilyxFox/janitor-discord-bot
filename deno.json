@@ -10,9 +10,9 @@
     "$types/": "./types/",
     "$discord/": "./discord/",
     "$utils/": "./utils/",
-    "drizzle-kit": "npm:drizzle-kit@^0.30.4",
-    "drizzle-orm": "npm:drizzle-orm@^0.39.3",
-    "nanoid": "npm:nanoid@^5.1.0",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.40.0",
+    "nanoid": "npm:nanoid@^5.1.2",
     "zod": "npm:zod@^3.24.2"
   },
   "fmt": {
