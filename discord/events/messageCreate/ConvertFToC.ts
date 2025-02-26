@@ -12,7 +12,7 @@ import {
 } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
-const log = getLogger(["discord-bot", "event-handler"]);
+const logger = getLogger(["discord-bot", "event-handler"]);
 
 export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
   event = Events.MessageCreate as const;
@@ -27,11 +27,14 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
 
     if (!matches || matches.length === 0) return;
 
+    const log = logger.with({
+      messageId: message.id,
+      channelId: message.channelId,
+      authorId: message.author.id,
+    });
+
     try {
       log.debug("Found Fahrenheit temperature(s) in message", {
-        messageId: message.id,
-        channelId: message.channelId,
-        authorId: message.author.id,
         matches: matches.map((m) => m[0]),
       });
 
@@ -64,9 +67,6 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
         components: [row],
       });
       log.info(`Replied with {conversionCount} temperature conversion(s) for ${message.author.username}`, {
-        messageId: message.id,
-        channelId: message.channelId,
-        authorId: message.author.id,
         conversionCount: conversions.length,
         conversions: conversionDetails,
       });
@@ -75,7 +75,6 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
         log.error("Error converting temperature", {
           errorMessage: `${error.name} ${error.message}`,
           errorStack: error.stack,
-          messageId: message.id,
         });
       }
     }
