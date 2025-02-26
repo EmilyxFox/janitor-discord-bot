@@ -1,11 +1,9 @@
 import { ClientEvents, Collection } from "discord.js";
 import { DiscordBot } from "$discord/DiscordBot.ts";
-import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
 import { nanoid } from "nanoid";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 import { FindBlueskyHandles } from "$discord/events/messageCreate/FindBlueskyHandles.ts";
-import { LogMessage } from "$discord/events/messageCreate/LogMessage.ts";
 import { RespondToGoodBot } from "$discord/events/messageCreate/RespondToGoodBot.ts";
 import { HandleNoGuilds } from "$discord/events/ready/HandleNoGuilds.ts";
 import { HandleDisconnection } from "$discord/events/shardDisconnect/HandleDisconnection.ts";
@@ -38,8 +36,6 @@ export class EventHandler {
       new EnforceSpoiler(),
       new ConvertFToC(),
     ]);
-
-    if (env.DEV) this.addHandlers([new LogMessage()]);
   }
 
   public handleEvent<Event extends keyof ClientEvents>(event: Event, ...args: ClientEvents[Event]) {

@@ -4,6 +4,7 @@ import { EventHandlerFunction } from "$types/EventHandler.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
+// This event handler is not used
 export class LogMessage implements EventHandlerFunction<Events.MessageCreate> {
   event = Events.MessageCreate as const;
   runOnce = false;

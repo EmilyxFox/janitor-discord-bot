@@ -12,50 +12,71 @@ import {
 } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
-const log = getLogger(["discord-bot", "event-handler"]);
+const logger = getLogger(["discord-bot", "event-handler"]);
 
 export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
   event = Events.MessageCreate as const;
   runOnce = false;
-  run(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-    if (message.author.id === message.client.user.id) return;
-
-    log.debug(`Processing message from ${message.author.displayName}: ${message.content}`);
+  async run(message: OmitPartialGroupDMChannel<Message<boolean>>) {
+    if (message.author.bot) return;
 
     // Regular expression to match temperatures in Fahrenheit
-    // const regex = /\b[0-9]{1,3}\s?[Ff]\b/g;
-    const regex = /(?:^|\s)-[0-9]{1,3}\s?[Ff]($|\s)|\b[0-9]{1,3}\s?[Ff]($|\s)/g;
-    const matches = message.content.match(regex);
+    // It needs to look like this to capture negative numbers first
+    const fahrenheitPattern = /(?:^|\s)-[0-9]{1,3}\s?[Ff]($|\s)|\b[0-9]{1,3}\s?[Ff]($|\s)/g;
+    const matches = message.content.match(fahrenheitPattern);
 
-    if (!matches) {
-      log.debug("No temperature conversions needed");
-      return;
+    if (!matches || matches.length === 0) return;
+
+    const log = logger.with({
+      messageId: message.id,
+      channelId: message.channelId,
+      authorId: message.author.id,
+    });
+
+    try {
+      log.debug("Found Fahrenheit temperature(s) in message", {
+        matches: matches.map((m) => m[0]),
+      });
+
+      const conversions: string[] = [];
+      const conversionDetails: Array<{ fahrenheit: number; celsius: number }> = [];
+
+      for (const match of matches) {
+        const fahrenheit = parseFloat(match.replace(/[Ff]/, ""));
+        const celsius = ((fahrenheit - 32) * 5) / 9;
+
+        conversions.push(`${bold(`${celsius.toFixed(1)}°C`)}\n${subtext(`${fahrenheit}°F`)}`);
+        conversionDetails.push({
+          fahrenheit,
+          celsius: parseFloat(celsius.toFixed(1)),
+        });
+      }
+
+      const dismissButton = new ButtonBuilder()
+        .setCustomId(`dismiss:user`)
+        .setLabel("Dismiss")
+        .setEmoji("🫣")
+        .setStyle(ButtonStyle.Danger);
+
+      const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+        .addComponents(dismissButton);
+
+      await message.reply({
+        content: conversions.join("\n"),
+        allowedMentions: { repliedUser: false },
+        components: [row],
+      });
+      log.info(`Replied with {conversionCount} temperature conversion(s) for ${message.author.username}`, {
+        conversionCount: conversions.length,
+        conversions: conversionDetails,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        log.error("Error converting temperature", {
+          errorMessage: `${error.name} ${error.message}`,
+          errorStack: error.stack,
+        });
+      }
     }
-
-    let response = message.content;
-
-    for (const match of matches) {
-      // Extract the numeric value
-      const fahrenheit = parseInt(match.replace(/[Ff]/, ""));
-      // Convert to Celsius
-      const celsius = Math.round(((fahrenheit - 32) * 5) / 9);
-
-      log.debug(`Converting ${fahrenheit}F to ${celsius}C`);
-
-      // Replace the Fahrenheit temperature with both F and C
-      response = `${bold(`${celsius}°C`)}\n${subtext(`${fahrenheit}°F`)}`;
-    }
-
-    const dismissButton = new ButtonBuilder()
-      .setCustomId(`dismiss:user`)
-      .setLabel("Dismiss")
-      .setEmoji("🫣")
-      .setStyle(ButtonStyle.Danger);
-
-    const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
-      .addComponents(dismissButton);
-
-    log.info(`Sending temperature conversion response for ${message.author.displayName}`);
-    message.reply({ content: response, components: [row] });
   }
 }

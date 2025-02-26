@@ -8,7 +8,7 @@ export const setupLogging = async () => {
     sinks: {
       console: withFilter(
         getConsoleSink(),
-        env.DEV ? "debug" : "info",
+        env.LOG_LEVEL === "INFO" ? "info" : "debug",
       ),
       coalescedFile: getRotatingFileSink("logs/coalesced.log", {
         maxSize: 0x400 * 0x400, // 1MiB
