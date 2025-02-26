@@ -70,22 +70,22 @@ export class BulkDeleteCommand implements Command {
         confirmMessage.resource?.message?.delete();
 
         interaction.channel.bulkDelete(deleteAmount)
-          .catch((e) => {
-            if (e instanceof DiscordAPIError) {
-              if (e.code === 50001) {
+          .catch((error: unknown) => {
+            if (error instanceof DiscordAPIError) {
+              if (error.code === 50001) {
                 log.warn("Missing Access error in BulkDelete.ts", {
-                  errorMessage: `${e.name} ${e.message}`,
-                  errorStack: e.stack,
+                  errorMessage: `${error.name} ${error.message}`,
+                  errorStack: error.stack,
                 });
                 return interaction.editReply({
                   content: "I do not have permission to delete messages in this channel.",
                   components: [],
                 });
               }
-              if (e.code === 10008) {
+              if (error.code === 10008) {
                 log.warn("Unknown Message error in BulkDelete.ts", {
-                  errorMessage: `${e.name} ${e.message}`,
-                  errorStack: e.stack,
+                  errorMessage: `${error.name} ${error.message}`,
+                  errorStack: error.stack,
                 });
                 return interaction.editReply({
                   content: "I cannot delete those messages.",

@@ -31,6 +31,6 @@ discordREST
       console.log("Successfully deregistered all global appliaction (/) commands");
     }
   })
-  .catch((err: unknown) => {
-    console.error("Error deregistering global application (/) commands", err);
+  .catch((error: unknown) => {
+    console.error("Error deregistering global application (/) commands", error);
   });
