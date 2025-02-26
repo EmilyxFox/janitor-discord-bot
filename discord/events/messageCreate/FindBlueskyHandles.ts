@@ -1,4 +1,13 @@
-import { EmbedBuilder, Events, Message, OmitPartialGroupDMChannel } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+  Events,
+  Message,
+  MessageActionRowComponentBuilder,
+  OmitPartialGroupDMChannel,
+} from "discord.js";
 import { GetProfiles } from "$types/bluesky.ts";
 import { getLogger } from "@logtape/logtape";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
@@ -83,6 +92,15 @@ export class FindBlueskyHandles implements EventHandlerFunction<Events.MessageCr
       embeds.push(embed);
     }
 
-    message.channel.send({ embeds });
+    const dismissButton = new ButtonBuilder()
+      .setCustomId(`dismiss:user`)
+      .setLabel("Dismiss")
+      .setEmoji("🫣")
+      .setStyle(ButtonStyle.Danger);
+
+    const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+      .addComponents(dismissButton);
+
+    message.reply({ embeds, components: [row] });
   }
 }
