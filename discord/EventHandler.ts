@@ -13,6 +13,7 @@ import { BotLoggedInAndAvailble } from "$discord/events/ready/BecomeAvailable.ts
 import { HandleCommand } from "$discord/events/interactionCreate/HandleCommand.ts";
 import { EnforceSpoiler } from "$discord/events/messageCreate/EnforceSpoiler.ts";
 import { ConvertFToC } from "$discord/events/messageCreate/ConvertFToC.ts";
+import { HandleButton } from "$discord/events/interactionCreate/HandleButton.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
@@ -33,6 +34,7 @@ export class EventHandler {
       new HandleNoGuilds(),
       new HandleDisconnection(),
       new HandleCommand(),
+      new HandleButton(),
       new EnforceSpoiler(),
       new ConvertFToC(),
     ]);
