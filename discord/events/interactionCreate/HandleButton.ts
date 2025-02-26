@@ -12,7 +12,7 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
 
     const log = logger.with({
       customId: interaction.customId,
-      messageId: interaction.message,
+      messageId: interaction.message.id,
       userId: interaction.user.id,
       channelId: interaction.channelId,
       guildId: interaction.guildId,
