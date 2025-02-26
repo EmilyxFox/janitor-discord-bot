@@ -23,9 +23,9 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
     // Regular expression to match temperatures in Fahrenheit
     // It needs to look like this to capture negative numbers first
     const fahrenheitPattern = /(?:^|\s)-[0-9]{1,3}\s?[Ff]($|\s)|\b[0-9]{1,3}\s?[Ff]($|\s)/g;
-    const matches = [...message.content.matchAll(fahrenheitPattern)];
+    const matches = message.content.match(fahrenheitPattern);
 
-    if (matches.length === 0) return;
+    if (!matches || matches.length === 0) return;
 
     try {
       log.debug("Found Fahrenheit temperature(s) in message", {
@@ -39,7 +39,7 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
       const conversionDetails: Array<{ fahrenheit: number; celsius: number }> = [];
 
       for (const match of matches) {
-        const fahrenheit = parseFloat(match[1]);
+        const fahrenheit = parseFloat(match.replace(/[Ff]/, ""));
         const celsius = ((fahrenheit - 32) * 5) / 9;
 
         conversions.push(`${bold(`${celsius.toFixed(1)}°C`)}\n${subtext(`${fahrenheit}°F`)}`);
