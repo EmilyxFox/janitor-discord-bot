@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, REST, Routes } from "discord.js";
+import { type ChatInputCommandInteraction, DiscordAPIError, REST, RESTPutAPIApplicationCommandsResult, Routes } from "discord.js";
 import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
@@ -49,7 +49,14 @@ export class CommandHandler {
         }
       })
       .catch((err: unknown) => {
-        log.warn("Error registering global application (/) commands", { err });
+        if (err instanceof DiscordAPIError) {
+          log.warn("Error registering global application (/) commands", {
+            rawError: err.rawError,
+            status: err.status,
+            errorCode: err.code,
+          });
+        }
+        throw err;
       });
   }
 
@@ -68,7 +75,8 @@ export class CommandHandler {
       })
         .then((data: unknown) => {
           if (Array.isArray(data)) {
-            const commands: string[] = data.map((d) => d.name);
+            const apiResp = data as RESTPutAPIApplicationCommandsResult;
+            const commands: string[] = apiResp.map((d) => d.name);
             log.info("Successfully registered {amount} guild application commands", {
               commands,
               guilds,
@@ -77,7 +85,14 @@ export class CommandHandler {
           }
         })
         .catch((err: unknown) => {
-          log.warn("Error registering guild application (/) commands", { err });
+          if (err instanceof DiscordAPIError) {
+            log.warn("Error registering guild application (/) commands", {
+              rawError: err.rawError,
+              status: err.status,
+              errorCode: err.code,
+            });
+          }
+          throw err;
         });
     }
   }
