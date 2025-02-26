@@ -15,6 +15,7 @@ services:
       GUILDS: ${GUILDS}
       DB_URL: http://db:8080
       DEV: TRUE
+      LOG_LEVEL: DEBUG
     restart: unless-stopped
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
