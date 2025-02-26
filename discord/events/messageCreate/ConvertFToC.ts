@@ -1,5 +1,15 @@
 import { getLogger } from "@logtape/logtape";
-import { bold, Events, Message, OmitPartialGroupDMChannel, subtext } from "discord.js";
+import {
+  ActionRowBuilder,
+  bold,
+  ButtonBuilder,
+  ButtonStyle,
+  Events,
+  Message,
+  MessageActionRowComponentBuilder,
+  OmitPartialGroupDMChannel,
+  subtext,
+} from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
@@ -36,11 +46,16 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
       response = `${bold(`${celsius}°C`)}\n${subtext(`${fahrenheit}°F`)}`;
     }
 
-    //test
+    const dismissButton = new ButtonBuilder()
+      .setCustomId(`dismiss:user`)
+      .setLabel("Dismiss")
+      .setEmoji("🫣")
+      .setStyle(ButtonStyle.Danger);
 
-    if (response !== message.content) {
-      log.info(`Sending temperature conversion response for ${message.author.displayName}`);
-      message.reply(response);
-    }
+    const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+      .addComponents(dismissButton);
+
+    log.info(`Sending temperature conversion response for ${message.author.displayName}`);
+    message.reply({ content: response, components: [row] });
   }
 }
