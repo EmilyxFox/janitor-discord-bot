@@ -63,7 +63,7 @@ export class ConvertFToC implements EventHandlerFunction<Events.MessageCreate> {
         allowedMentions: { repliedUser: false },
         components: [row],
       });
-      log.info(`Replied with {conversionCount} temperature conversions for ${message.author.username}`, {
+      log.info(`Replied with {conversionCount} temperature conversion(s) for ${message.author.username}`, {
         messageId: message.id,
         channelId: message.channelId,
         authorId: message.author.id,
