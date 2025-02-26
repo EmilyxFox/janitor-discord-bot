@@ -1,17 +1,32 @@
 import { ButtonInteraction, CacheType, Events, Interaction, MessageFlags, PermissionFlagsBits } from "discord.js";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
+import { getLogger } from "@logtape/logtape";
+
+const logger = getLogger(["discord-bot", "event-handler"]);
 
 export class HandleButton implements EventHandlerFunction<Events.InteractionCreate> {
   event = Events.InteractionCreate as const;
   runOnce = false;
   run: (interaction: Interaction<CacheType>) => unknown = async (interaction) => {
     if (!interaction.isButton()) return;
+
+    const log = logger.with({
+      customId: interaction.customId,
+      messageId: interaction.message,
+      userId: interaction.user.id,
+      channelId: interaction.channelId,
+      guildId: interaction.guildId,
+    });
+
+    log.debug("Button interaction received");
+
     if (!interaction.channel?.isTextBased()) return;
 
     let parsedId;
     try {
       parsedId = parseButtonId(interaction.customId);
     } catch (_error) {
+      log.error("Invalid button format");
       return interaction.reply({
         content: "Invalid button format.",
         flags: MessageFlags.Ephemeral,
@@ -43,6 +58,7 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
         case "user": {
           const repliedMessageId = interaction.message.reference?.messageId;
           if (!repliedMessageId) {
+            log.error("Error fetching replied message");
             return interaction.reply({
               content: "I can't figure out whether you are allowed to dismiss this message.",
               flags: MessageFlags.Ephemeral,
@@ -55,6 +71,7 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
           if (interaction.inGuild()) {
             const user = await interaction.guild?.members.fetch(interaction.user.id);
             if (!user) {
+              log.error("Error fetching permissions");
               return interaction.reply({
                 content: "Error fetching permissions.",
                 flags: MessageFlags.Ephemeral,
@@ -74,14 +91,15 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
           break;
         }
         default:
-          interaction.reply({
+          log.error("Unknown button permissions");
+          return interaction.reply({
             content: "Unknown button permissons.",
             flags: MessageFlags.Ephemeral,
           });
-          break;
       }
     } else {
-      interaction.reply({
+      log.error("Unknown button interaction");
+      return interaction.reply({
         content: "Unknown button interaction.",
         flags: MessageFlags.Ephemeral,
       });
@@ -99,7 +117,7 @@ const parseButtonId = (customId: string): { action: string; permission: string; 
   return {
     action: parts[0],
     permission: parts[1],
-    value: parts[2] || "", // Default to empty string if the value is omitted
+    value: parts[2] || "",
   };
 };
 
