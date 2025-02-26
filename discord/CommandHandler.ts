@@ -48,15 +48,15 @@ export class CommandHandler {
           });
         }
       })
-      .catch((err: unknown) => {
-        if (err instanceof DiscordAPIError) {
+      .catch((error: unknown) => {
+        if (error instanceof DiscordAPIError) {
           log.warn("Error registering global application (/) commands", {
-            rawError: err.rawError,
-            status: err.status,
-            errorCode: err.code,
+            rawError: error.rawError,
+            status: error.status,
+            errorCode: error.code,
           });
         }
-        throw err;
+        throw error;
       });
   }
 
@@ -84,15 +84,15 @@ export class CommandHandler {
             });
           }
         })
-        .catch((err: unknown) => {
-          if (err instanceof DiscordAPIError) {
+        .catch((error: unknown) => {
+          if (error instanceof DiscordAPIError) {
             log.warn("Error registering guild application (/) commands", {
-              rawError: err.rawError,
-              status: err.status,
-              errorCode: err.code,
+              rawError: error.rawError,
+              status: error.status,
+              errorCode: error.code,
             });
           }
-          throw err;
+          throw error;
         });
     }
   }

@@ -11,7 +11,7 @@ export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCrea
     if (!message.reference?.messageId) return;
 
     const repliedTo = await message.channel.messages.fetch(message.reference.messageId)
-      .catch((error) => {
+      .catch((error: unknown) => {
         if (error instanceof DiscordAPIError) {
           if (error.code === 10008) {
             return log.warn("Unknown Message error in respondToGoodBot.ts", {
