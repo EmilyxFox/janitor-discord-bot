@@ -47,7 +47,7 @@ The bot is written in Typescript to be run on the Deno runtime.
   - [x] Set up database
 - [ ] Automatic bulk message deletion
 - [ ] Starboard
-- [ ] Button to remove automatic message replies
+- [x] Button to remove automatic message replies
   - [ ] Permission system for it
 
 See the [open issues](../../issues) for a full list of proposed features (and known issues).
