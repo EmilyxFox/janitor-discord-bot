@@ -8,7 +8,15 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
     if (!interaction.isButton()) return;
     if (!interaction.channel?.isTextBased()) return;
 
-    const parsedId = parseButtonId(interaction.customId);
+    let parsedId;
+    try {
+      parsedId = parseButtonId(interaction.customId);
+    } catch (_error) {
+      return interaction.reply({
+        content: "Invalid button format.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
 
     if (parsedId.action === "dismiss") {
       switch (parsedId?.permission) {
@@ -42,8 +50,25 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
           }
           const repliedMessage = await interaction.channel.messages.fetch(repliedMessageId);
           if (repliedMessage.author.id === interaction.user.id) {
-            await dismissMessage(interaction);
+            return await dismissMessage(interaction);
+          } else if (interaction.inGuild()) {
+            const user = await interaction.guild?.members.fetch(interaction.user.id);
+            if (!user) {
+              return interaction.reply({
+                content: "Error fetching permissions.",
+                flags: MessageFlags.Ephemeral,
+              });
+            }
+            if (user.permissionsIn(interaction.channelId).has(PermissionFlagsBits.ManageMessages)) {
+              await dismissMessage(interaction);
+            }
+          } else {
+            return interaction.reply({
+              content: "This message can only be dismissed by the user who triggered it or an admin.",
+              flags: MessageFlags.Ephemeral,
+            });
           }
+
           break;
         }
         case "any": {
@@ -51,6 +76,10 @@ export class HandleButton implements EventHandlerFunction<Events.InteractionCrea
           break;
         }
         default:
+          interaction.reply({
+            content: "Unknown button permissons.",
+            flags: MessageFlags.Ephemeral,
+          });
           break;
       }
     } else {
