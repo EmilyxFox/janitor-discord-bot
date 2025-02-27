@@ -72,12 +72,6 @@ export class FindBlueskyHandles implements EventHandlerFunction<Events.MessageCr
     const resp = await fetchBskyProfiles(matchedHandles);
     if (resp.profiles.length < 1) return;
 
-    log.info(`Bluesky profiles matched in message: {profiles}`, {
-      profiles: resp.profiles.map(({ did, handle }) => ({ did, handle })),
-      length: matchedHandles.length,
-      matchedHandles,
-    });
-
     const embeds: EmbedBuilder[] = [];
     for (const profile of resp.profiles) {
       const embed = new EmbedBuilder()
@@ -101,6 +95,15 @@ export class FindBlueskyHandles implements EventHandlerFunction<Events.MessageCr
     const row = new ActionRowBuilder<MessageActionRowComponentBuilder>()
       .addComponents(dismissButton);
 
-    message.reply({ embeds, components: [row] });
+    await message.reply({
+      embeds,
+      allowedMentions: { repliedUser: false },
+      components: [row],
+    });
+    log.info(`Bluesky profiles matched in message: {profiles}`, {
+      profiles: resp.profiles.map(({ did, handle }) => ({ did, handle })),
+      length: matchedHandles.length,
+      matchedHandles,
+    });
   }
 }
