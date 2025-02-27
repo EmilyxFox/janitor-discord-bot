@@ -49,6 +49,7 @@ The bot is written in Typescript to be run on the Deno runtime.
 - [ ] Starboard
 - [x] Button to remove automatic message replies
   - [ ] Permission system for it
+- [ ] Let boosters set their own colour
 
 See the [open issues](../../issues) for a full list of proposed features (and known issues).
 
