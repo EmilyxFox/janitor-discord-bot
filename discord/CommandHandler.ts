@@ -3,11 +3,7 @@ import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
 import type { Command } from "$types/Command.ts";
-import { PingCommand } from "$discord/commands/Ping.ts";
-import { BulkDeleteCommand } from "$discord/commands/BulkDelete.ts";
-import { CreatePollCommand } from "$discord/commands/CreatePoll.ts";
-import { GitHubCommand } from "$discord/commands/GitHub.ts";
-import { EnforceSpoiler } from "$discord/commands/EnforceSpoiler.ts";
+import { commands } from "$discord/commands/mod.ts";
 
 const log = getLogger(["discord-bot", "command-handler"]);
 
@@ -22,7 +18,7 @@ export class CommandHandler {
       throw new Error("Invalid Discord token when registering commands");
     }
 
-    this.commands = [new PingCommand(), new BulkDeleteCommand(), new CreatePollCommand(), new GitHubCommand(), new EnforceSpoiler()];
+    this.commands = commands;
     this.discordREST = new REST().setToken(discordBot.token);
   }
 
