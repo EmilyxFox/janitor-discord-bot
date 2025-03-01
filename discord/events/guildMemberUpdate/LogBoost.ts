@@ -4,7 +4,6 @@ import { EventHandlerFunction } from "$types/EventHandler.ts";
 
 const log = getLogger(["discord-bot", "event-handler"]);
 
-// This event handler is not used
 export class LogBoost implements EventHandlerFunction<Events.GuildMemberUpdate> {
   event = Events.GuildMemberUpdate as const;
   runOnce = false;
