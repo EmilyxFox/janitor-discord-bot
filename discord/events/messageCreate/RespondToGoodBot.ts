@@ -2,7 +2,7 @@ import { DiscordAPIError, Events, Message, OmitPartialGroupDMChannel } from "dis
 import { getLogger } from "@logtape/logtape";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
-const log = getLogger(["discord-bot", "event-handler"]);
+const logger = getLogger(["discord-bot", "event-handler"]);
 
 export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCreate> {
   event = Events.MessageCreate as const;
@@ -10,11 +10,20 @@ export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCrea
   async run(message: OmitPartialGroupDMChannel<Message<boolean>>) {
     if (!message.reference?.messageId) return;
 
-    const repliedTo = await message.channel.messages.fetch(message.reference.messageId)
+    const referencedMessageId = message.reference.messageId;
+
+    const log = logger.with({
+      messageId: message.id,
+      channelId: message.channelId,
+      authorId: message.author.id,
+      referencedMessageId,
+    });
+
+    const repliedTo = await message.channel.messages.fetch(referencedMessageId)
       .catch((error: unknown) => {
         if (error instanceof DiscordAPIError) {
           if (error.code === 10008) {
-            return log.warn("Unknown Message error in respondToGoodBot.ts", {
+            return log.warn("Unknown Message error in respondToGoodBot.ts. Tried to fetch { fetchedMessageId }", {
               errorMessage: `${error.name} ${error.message}`,
               errorStack: error.stack,
             });
