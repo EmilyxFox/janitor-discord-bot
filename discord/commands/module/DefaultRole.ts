@@ -49,7 +49,6 @@ export class DefaultRoleCommand implements Command {
     );
 
   async run(interaction: ChatInputCommandInteraction): Promise<unknown> {
-    interaction.deferReply();
     switch (interaction.options.getSubcommand(false)) {
       case "set": {
         try {
