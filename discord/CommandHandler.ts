@@ -127,9 +127,8 @@ export class CommandHandler {
           });
         }
         if (interaction.deferred) {
-          interaction.reply({
+          interaction.editReply({
             content: subtext("There was an error executing this command."),
-            flags: MessageFlags.Ephemeral,
           });
         }
       }
