@@ -71,7 +71,5 @@ export class DefaultRole implements EventHandlerFunction<Events.GuildMemberAdd> 
         throw error;
       }
     }
-
-    // log.debug(`[${message.author.displayName}]: ${message.content}`);
   }
 }
