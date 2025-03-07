@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, DiscordAPIError, MessageFlags, REST, RESTPutAPIApplicationCommandsResult, Routes, subtext } from "discord.js";
+import { type ChatInputCommandInteraction, DiscordAPIError, REST, RESTPutAPIApplicationCommandsResult, Routes, subtext } from "discord.js";
 import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
