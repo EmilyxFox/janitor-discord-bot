@@ -1,4 +1,4 @@
-import { type ChatInputCommandInteraction, DiscordAPIError, REST, RESTPutAPIApplicationCommandsResult, Routes } from "discord.js";
+import { type ChatInputCommandInteraction, DiscordAPIError, MessageFlags, REST, RESTPutAPIApplicationCommandsResult, Routes, subtext } from "discord.js";
 import { DiscordBot } from "$discord/DiscordBot.ts";
 import { env } from "$utils/env.ts";
 import { getLogger, withContext } from "@logtape/logtape";
@@ -124,6 +124,12 @@ export class CommandHandler {
           log.error(`Error executing command [${commandDetails}] {errorMessage}`, {
             errorMessage: `${error.name} ${error.message}`,
             errorStack: error.stack,
+          });
+        }
+        if (interaction.deferred) {
+          interaction.reply({
+            content: subtext("There was an error executing this command."),
+            flags: MessageFlags.Ephemeral,
           });
         }
       }
