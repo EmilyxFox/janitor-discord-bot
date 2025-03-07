@@ -9,6 +9,7 @@ import { BotLoggedInAndAvailble } from "$discord/events/ready/BecomeAvailable.ts
 import { HandleNoGuilds } from "$discord/events/ready/HandleNoGuilds.ts";
 import { StartCronJobs } from "$discord/events/ready/StartCronJobs.ts";
 import { HandleDisconnection } from "$discord/events/shardDisconnect/HandleDisconnection.ts";
+import { DefaultRole } from "$discord/events/guildMemberAdd/DefaultRole.ts";
 
 export const events = [
   new LogBoost(),
@@ -22,4 +23,5 @@ export const events = [
   new HandleNoGuilds(),
   new StartCronJobs(),
   new HandleDisconnection(),
+  new DefaultRole(),
 ];
