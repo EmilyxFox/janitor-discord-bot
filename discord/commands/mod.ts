@@ -4,6 +4,7 @@ import { EnforceSpoiler } from "$discord/commands/module/EnforceSpoiler.ts";
 import { GitHubCommand } from "$discord/commands/module/GitHub.ts";
 import { PingCommand } from "$discord/commands/module/Ping.ts";
 import { DefaultRoleCommand } from "$discord/commands/module/DefaultRole.ts";
+import { JoinVCCommand } from "$discord/commands/module/JoinVC.ts";
 
 export const commands = [
   new BulkDeleteCommand(),
@@ -12,4 +13,5 @@ export const commands = [
   new GitHubCommand(),
   new PingCommand(),
   new DefaultRoleCommand(),
+  new JoinVCCommand(),
 ];
