@@ -1,4 +1,4 @@
-import { DiscordAPIError, Events, Message, OmitPartialGroupDMChannel } from "discord.js";
+import { ChannelType, DiscordAPIError, Events, Message, OmitPartialGroupDMChannel } from "discord.js";
 import { getLogger } from "@logtape/logtape";
 import { EventHandlerFunction } from "$types/EventHandler.ts";
 
@@ -8,9 +8,11 @@ export class RespondToGoodBot implements EventHandlerFunction<Events.MessageCrea
   event = Events.MessageCreate as const;
   runOnce = false;
   async run(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-    if (!message.reference?.messageId) return;
+    const referencedMessageId = message.reference?.messageId;
 
-    const referencedMessageId = message.reference.messageId;
+    if (!referencedMessageId) return;
+
+    if (![ChannelType.GuildCategory].includes(message.channel.type)) return;
 
     const log = logger.with({
       messageId: message.id,
