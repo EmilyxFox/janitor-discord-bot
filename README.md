@@ -50,6 +50,7 @@ The bot is written in Typescript to be run on the Deno runtime.
 - [x] Button to remove automatic message replies
   - [ ] Permission system for it
 - [ ] Let boosters set their own colour
+- [ ] Server emoji popularity tracking
 
 See the [open issues](../../issues) for a full list of proposed features (and known issues).
 
