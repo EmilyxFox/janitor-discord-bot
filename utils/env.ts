@@ -13,7 +13,7 @@ const envSchema = z.object({
     .transform((val) => val.toUpperCase())
     .pipe(z.enum(["DEBUG", "INFO"]))
     .default("DEBUG"),
-  "DB_URL": z.string().url(),
+  // "DB_URL": z.string().url(),
   "DB_AUTH": z.string().optional(),
   "DEV": z
     .string()
